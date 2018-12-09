@@ -5,11 +5,13 @@ import Login from "@/components/Login";
 import AntDesignVue from "ant-design-vue";
 import "ant-design-vue/dist/antd.css";
 import MenuView from "@/components/MenuView";
+import axios from "axios";
 
 Vue.config.productionTip = false;
 
 Vue.use(Router);
 Vue.use(AntDesignVue);
+Vue.prototype.$axios = axios;
 
 const routes = [
   {
@@ -21,14 +23,23 @@ const routes = [
     path: "/",
     name: "首页",
     component: MenuView,
-    props: {
-      itemList: [
-        { key: "1", icon: "arrow-left", text: "关闭左侧" },
-        { key: "2", icon: "arrow-right", text: "关闭右侧" },
-        { key: "3", icon: "close", text: "关闭其它" }
-      ],
-      visible: true
-    }
+    // children: [
+    //   {
+    //     path: '/system-index',
+    //     name: '系统首页',
+    //     component: SystemIndex
+    //   },
+    //   {
+    //     path: '/system-index',
+    //     name: '系统首页',
+    //     component: SystemIndex
+    //   },
+    //   {
+    //     path: '/system-index',
+    //     name: '系统首页',
+    //     component: SystemIndex
+    //   },
+    // ]
   }
 ];
 
