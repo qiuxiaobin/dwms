@@ -42,16 +42,56 @@ export default {
   data() {
     return {
       userName: "",
-      menuList: [],
+      menuList: [
+        {
+          field: "workspace",
+          title: "系统首页"
+        },
+        {
+          field: "report",
+          title: "报表信息",
+          children: [
+            {
+              field: "paidTrust",
+              title: "实收信托"
+            },
+            {
+              field: "trustEstate",
+              title: "总资产"
+            },
+            {
+              field: "totalAssetsRate",
+              title: "净资产"
+            },
+            {
+              field: "aggreateScale",
+              title: "新增集合信托"
+            },
+            {
+              field: "propertyScale",
+              title: "新增财产信托"
+            },
+            {
+              field: "singleScale",
+              title: "新增单一信托"
+            }
+          ]
+        },
+        {
+          field: "analysis",
+          title: "指标分析",
+          children: [
+            {
+              field: "dupont",
+              title: "杜邦分析"
+            }
+          ]
+        }
+      ],
       openKeys: ["report", "analysis"]
     };
   },
   created() {
-    this.$axios.get("/menu").then(({ data }) => {
-      if (data.code > -1) {
-        this.menuList = data.data.list;
-      }
-    });
     this.$axios.get("/user").then(({ data }) => {
       if (data.code > -1) {
         this.userName = data.data.name;
@@ -60,7 +100,7 @@ export default {
   },
   methods: {
     onMenuItemClick(name, field) {
-      this.$router.push({ name, params: { field } });
+      this.$router.push({ path: `/${name}/${field}` });
     },
     onTitleClick({ key }) {
       this.openKeys = this.openKeys.reduce(
