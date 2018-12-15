@@ -1,34 +1,31 @@
 <template>
-  <a-layout>
+  <a-layout :class="$style.container">
     <a-layout-sider>
       <div :class="$style.title">
-        <img :class="$style.logo" src="@/assets/logo.png">
+        <img :class="$style.logo" src="@assets/logo.png">
         <span>信托数据仓库管理系统</span>
       </div>
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" :default-open-keys="['sub1', 'sub2']">
-        <a-menu-item key="1">系统首页</a-menu-item>
-        <a-sub-menu key="sub1" title="报表信息">
-          <a-menu-item>信托总资产</a-menu-item>
-          <a-menu-item>总资产</a-menu-item>
-          <a-menu-item>静资产</a-menu-item>
-          <a-menu-item>新增集合信托</a-menu-item>
-          <a-menu-item>新增财产信托</a-menu-item>
-          <a-menu-item>新增单一信托</a-menu-item>
-          <a-menu-item>信托报酬</a-menu-item>
-        </a-sub-menu>
-        <a-sub-menu key="sub2" title="指标分析">
-          <a-menu-item>杜邦分析</a-menu-item>
-        </a-sub-menu>
+      <a-menu theme="dark" mode="inline" :selected-keys="[field]" :open-keys="openKeys">
+        <template v-for="menuItem in menuList">
+          <a-sub-menu :key="menuItem.field" v-if="menuItem.children" :title="menuItem.title" @title-click="onTitleClick(menuItem.field)">
+            <a-menu-item v-for="subMenuItem in menuItem.children" :key="subMenuItem.field" @click="onMenuItemClick(menuItem.field, subMenuItem.field)">
+              <span>{{subMenuItem.title}}</span>
+            </a-menu-item>
+          </a-sub-menu>
+          <a-menu-item :key="menuItem.field" v-else @click="onMenuItemClick(menuItem.field)">
+            <span>{{menuItem.title}}</span>
+          </a-menu-item>
+        </template>
       </a-menu>
     </a-layout-sider>
     <a-layout>
       <a-layout-header :class="$style.header">
-        <div :class="$style.user">你好，管理员！</div>
+        <div :class="$style.user">你好，{{userName}}！</div>
         <a-icon :class="$style.poweroff" type="poweroff"></a-icon>
         <a-icon :class="$style.profile" type="profile"></a-icon>
       </a-layout-header>
       <a-layout-content :class="$style.content">
-        Content
+        <router-view></router-view>
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -36,15 +33,49 @@
 
 <script>
 export default {
-  beforeCreate() {
-    this.$axios.get('/DW/anuRustCompanyScale/selectByCondition?limit=10000').then(res => {
-      console.log(res);
+  props: {
+    field: {
+      type: String,
+      default: ""
+    }
+  },
+  data() {
+    return {
+      userName: "",
+      menuList: [],
+      openKeys: ["report", "analysis"]
+    };
+  },
+  created() {
+    this.$axios.get("/menu").then(({ data }) => {
+      if (data.code > -1) {
+        this.menuList = data.data.list;
+      }
     });
+    this.$axios.get("/user").then(({ data }) => {
+      if (data.code > -1) {
+        this.userName = data.data.name;
+      }
+    });
+  },
+  methods: {
+    onMenuItemClick(name, field) {
+      this.$router.push({ name, params: { field } });
+    },
+    onTitleClick({ key }) {
+      this.openKeys = this.openKeys.reduce(
+        (prev, openKey) => (openKey == key && prev) || [...prev, key],
+        []
+      );
+    }
   }
 };
 </script>
 
 <style module>
+.container {
+  min-height: 100vh;
+}
 .title {
   display: flex;
   justify-content: center;
@@ -53,7 +84,7 @@ export default {
   line-height: 60px;
   font-size: 14px;
   color: #fff;
-  background-color: #0f58e0;
+  background-color: #002140;
 }
 .logo {
   width: 16px;
@@ -69,7 +100,9 @@ export default {
 .content {
   margin: 16px 24px;
 }
-.poweroff, .profile, .user {
+.poweroff,
+.profile,
+.user {
   margin-right: 15px;
 }
 </style>
