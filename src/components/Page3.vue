@@ -2,8 +2,75 @@
     <div>
         <div class="menu3">{{fieldName}}</div>
 
-        <div>
-            <v-chart :options="chartOptions"></v-chart>
+        <div :class="$style.chartContainer">
+            <div :class="$style.box">
+              <span>净资产收益率</span>
+              <div :class="$style.yLineCenter">
+                <div :class="$style.xLine">
+                  <div :class="$style.yLineLeft">
+                    <div :class="$style.childBox">
+                      <span>总资产收益率</span>
+                      <div :class="$style.yLineCenter">
+                        <div :class="$style.xLine2">
+                            <div :class="$style.yLineLeft">
+                              <div :class="$style.childBox">
+                                <span>销售净利率</span>
+                                <div :class="$style.yLineCenter">
+                                  <div :class="$style.xLine3">
+                                      <div :class="$style.yLineLeft">
+                                        <div :class="$style.childBox">
+                                          <span>净利润</span> 
+                                        </div>
+                                      </div>
+                                      <div :class="$style.yLineRight">
+                                        <div :class="$style.childBox">
+                                          <span>销售收入</span> 
+                                        </div>
+                                      </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div :class="$style.yLineRight">
+                              <div :class="$style.childBox">
+                                  <span>总资产周转率</span> 
+                                  <div :class="$style.yLineCenter">
+                                    <div :class="$style.xLine4">
+                                        <div :class="$style.yLineLeft">
+                                          <div :class="$style.childBox">
+                                            <span>销售收入</span> 
+                                          </div>
+                                        </div>
+                                        <div :class="$style.yLineRight">
+                                          <div :class="$style.childBox">
+                                            <span>资产总额</span> 
+                                          </div>
+                                        </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div :class="$style.yLineRight">
+                    <div :class="$style.childBox">
+                      <span>权益乘数</span>
+                      <div :class="$style.yLineCenter">
+                        <div :class="$style.xLine5">
+                          <div :class="$style.yLineRight">
+                            <div :class="$style.childBox">
+                              <span>=1/(1-资产负债率)</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
 
         <a-table :columns="columns" :dataSource="dataSource">
@@ -54,17 +121,21 @@ export default {
           {
             type: "tree",
 
-            data: {
-              name: "asdd",
-              children: [
-                {
-                  name: "343243"
-                },
-                {
-                  name: "gregerg"
-                }
-              ]
-            },
+            data: [
+              {
+                name: "asdd",
+                children: [
+                  {
+                    name: "343243",
+                    value: 300
+                  },
+                  {
+                    name: "gregerg",
+                    value: 400
+                  }
+                ]
+              }
+            ],
 
             left: "2%",
             right: "2%",
@@ -171,7 +242,7 @@ export default {
   },
   methods: {
     getCompanyDatas() {
-      this.$axios.get("DW/trustCompany/getCompanyIdDatas").then(({ data }) => {
+      this.$axios.get("/DW/trustCompany/getCompanyIdDatas").then(({ data }) => {
         if (data.flag > -1) {
           this.companyDatas = data.data;
         } else {
@@ -180,7 +251,7 @@ export default {
       });
     },
     getFields() {
-      this.$axios.get("DW/Anu/getAnuFields").then(({ data }) => {
+      this.$axios.get("/DW/Anu/getAnuFields").then(({ data }) => {
         if (data.flag > -1) {
           this.fields = data.data;
         } else {
@@ -190,7 +261,7 @@ export default {
     },
     getDuPointFormulaData() {
       this.$axios
-        .get("DW/DuPont/getDuPointFormulaData", {
+        .get("/DW/DuPont/getDuPointFormulaData", {
           params: {
             type: this.type,
             year: this.year,
@@ -210,3 +281,82 @@ export default {
   }
 };
 </script>
+
+<style module>
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  height: 250px;
+}
+.box {
+  position: relative;
+  height: 30px;
+  line-height: 28px;
+  border: 1px solid #d7d8db;
+  border-radius: 15px;
+  padding: 0 16px;
+  color: #7b94fe;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.yLine {
+  position: absolute;
+  bottom: -16px;
+  width: 1px;
+  height: 16px;
+  background-color: #d7d8db;
+}
+.xLine {
+  position: absolute;
+  left: 50%;
+  bottom: -1px;
+  width: 237px;
+  height: 1px;
+  margin-left: -118.5px;
+  background-color: #d7d8db;
+}
+.xLine2 {
+  composes: xLine;
+  width: 305px;
+  margin-left: -152.5px;
+}
+.xLine3 {
+  composes: xLine;
+  width: 189px;
+  margin-left: -94.5px;
+}
+.xLine4 {
+  composes: xLine;
+  width: 197px;
+  margin-left: -98.5px;
+}
+.xLine5 {
+  composes: xLine;
+  left: 0;
+  width: 128px;
+  margin-left: 0;
+}
+.yLineCenter {
+  composes: yLine;
+  left: 50%;
+  margin-left: -0.5px;
+}
+.yLineLeft {
+  composes: yLine;
+  left: 0;
+  margin-left: 0;
+}
+.yLineRight {
+  composes: yLine;
+  right: 0;
+  margin-left: 0;
+}
+.childBox {
+  composes: box;
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+}
+</style>

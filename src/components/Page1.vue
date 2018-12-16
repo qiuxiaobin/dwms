@@ -207,7 +207,7 @@ export default {
       });
     },
     getFields() {
-      this.$axios.get("DW/Anu/getAnuFields").then(({ data }) => {
+      this.$axios.get("/DW/Anu/getAnuFields").then(({ data }) => {
         if (data.flag > -1) {
           this.fields = data.data;
         } else {
@@ -217,7 +217,7 @@ export default {
     },
     getLineBarChartData() {
       this.$axios
-        .get("DW/Anu/getLineBarChartData", {
+        .get("/DW/Anu/getLineBarChartData", {
           params: {
             field: this.field,
             showCompanys: this.companys.join(","),
@@ -246,7 +246,7 @@ export default {
     },
     getTableData() {
       this.$axios
-        .get("DW/Anu/getTableData", {
+        .get("/DW/Anu/getTableData", {
           params: {
             field: this.field,
             type: this.type

@@ -113,7 +113,7 @@ export default {
   methods: {
     getBarData() {
       this.$axios
-        .get("DW/Anu/getBarData", {
+        .get("/DW/Anu/getBarData", {
           params: {
             type: this.type,
             field: this.field,
@@ -130,7 +130,7 @@ export default {
         });
     },
     getFields() {
-      this.$axios.get("DW/Anu/getAnuFields").then(({ data }) => {
+      this.$axios.get("/DW/Anu/getAnuFields").then(({ data }) => {
         if (data.flag > -1) {
           this.fields = data.data;
         } else {
