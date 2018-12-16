@@ -1,14 +1,16 @@
 <template>
-    <div class="menu2">
+    <div>
         <div>
-          <h1 :class="$style.fieldName">{{fieldName}}</h1>
+          <span :class="$style.fieldName">{{fieldName}}</span>
         </div>
 
-        <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
+        <div :class="$style.chartContainer">
+          <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
+        </div>
 
-        <a-table :columns="columns" :dataSource="dataSource">
-          <template slot="operation" slot-scope="text, record">
-            <a-button success @click="onButtonClick(record.id)">{{record.name}}</a-button>
+        <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
+          <template v-if="field == 'dupont'" slot="operation" slot-scope="text, record">
+            <a-button success @click="onButtonClick(record.id)">查看详情</a-button>
           </template>
         </a-table>
     </div>
@@ -63,6 +65,20 @@ export default {
         ],
         tooltip: {},
         xAxis: {
+          boundaryGap: true,
+          axisLabel: {
+            formatter: value => (value || "").split("").join("\n"),
+            interval: 0
+          },
+          axisTick: {
+            alignWithLabel: true
+          },
+          grid: {
+            left: "3%",
+            right: "4%",
+            bottom: "3%",
+            containLabel: true
+          },
           type: "category",
           data: this.dataSource.map(({ name }) => name)
         },
@@ -94,11 +110,13 @@ export default {
           dataIndex: "data",
           key: "data"
         },
-        {
-          title: "操作",
-          dataIndex: "operation",
-          scopedSlots: { customRender: "operation" }
-        }
+        this.field == "dupont"
+          ? {
+              title: "操作",
+              dataIndex: "operation",
+              scopedSlots: { customRender: "operation" }
+            }
+          : {}
       ];
     },
     fieldName() {
@@ -139,6 +157,7 @@ export default {
       });
     },
     onChartClick(params) {
+      if (this.field !== "dupont") return;
       const companyId = this.dataSource[params.dataIndex].id;
       const path = `${this.$route.path}/${companyId}`;
 
@@ -158,7 +177,20 @@ export default {
 </script>
 
 <style module>
+.fieldName {
+  font-size: 16px;
+  line-height: 16px;
+  color: #3664ff;
+}
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .chart {
-  width: 1200px;
+  width: 1000px !important;
+}
+.table {
+  margin-top: 28px;
 }
 </style>

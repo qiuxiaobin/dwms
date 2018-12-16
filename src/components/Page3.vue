@@ -1,30 +1,33 @@
 <template>
     <div>
-        <div class="menu3">{{fieldName}}</div>
+        <div>
+          <span :class="$style.fieldName">{{fieldName}}</span>
+        </div>
 
         <div :class="$style.chartContainer">
+          <div>
             <div :class="$style.box">
-              <span>净资产收益率</span>
+              <boxContent @click="onBoxContentClick" :data="boxContentDataMap.dupont"></boxContent>
               <div :class="$style.yLineCenter">
                 <div :class="$style.xLine">
                   <div :class="$style.yLineLeft">
                     <div :class="$style.childBox">
-                      <span>总资产收益率</span>
+                      <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsRate">总资产收益率</boxContent>
                       <div :class="$style.yLineCenter">
                         <div :class="$style.xLine2">
                             <div :class="$style.yLineLeft">
                               <div :class="$style.childBox">
-                                <span>销售净利率</span>
+                                <boxContent @click="onBoxContentClick" :data="boxContentDataMap.salesInterestRate">销售净利率</boxContent>
                                 <div :class="$style.yLineCenter">
                                   <div :class="$style.xLine3">
                                       <div :class="$style.yLineLeft">
                                         <div :class="$style.childBox">
-                                          <span>净利润</span> 
+                                          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.netProfit">净利润</boxContent> 
                                         </div>
                                       </div>
                                       <div :class="$style.yLineRight">
                                         <div :class="$style.childBox">
-                                          <span>销售收入</span> 
+                                          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsRate">销售收入</boxContent> 
                                         </div>
                                       </div>
                                   </div>
@@ -33,17 +36,17 @@
                             </div>
                             <div :class="$style.yLineRight">
                               <div :class="$style.childBox">
-                                  <span>总资产周转率</span> 
+                                  <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsTurnover">总资产周转率</boxContent> 
                                   <div :class="$style.yLineCenter">
                                     <div :class="$style.xLine4">
                                         <div :class="$style.yLineLeft">
                                           <div :class="$style.childBox">
-                                            <span>销售收入</span> 
+                                            <boxContent @click="onBoxContentClick" :data="boxContentDataMap.salesRevenue">销售收入</boxContent> 
                                           </div>
                                         </div>
                                         <div :class="$style.yLineRight">
                                           <div :class="$style.childBox">
-                                            <span>资产总额</span> 
+                                            <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssets">资产总额</boxContent> 
                                           </div>
                                         </div>
                                     </div>
@@ -56,12 +59,12 @@
                   </div>
                   <div :class="$style.yLineRight">
                     <div :class="$style.childBox">
-                      <span>权益乘数</span>
+                      <boxContent @click="onBoxContentClick" :data="boxContentDataMap.equityMultiplier">权益乘数</boxContent>
                       <div :class="$style.yLineCenter">
                         <div :class="$style.xLine5">
                           <div :class="$style.yLineRight">
                             <div :class="$style.childBox">
-                              <span>=1/(1-资产负债率)</span>
+                              <boxContent @click="onBoxContentClick" :data="boxContentDataMap.assetLiabilityRatio">=1/(1-资产负债率)</boxContent>
                             </div>
                           </div>
                         </div>
@@ -71,22 +74,23 @@
                 </div>
               </div>
             </div>
+          </div>
         </div>
 
         <a-table :columns="columns" :dataSource="dataSource">
             <template slot="operation" slot-scope="text, record">
-            <a-button success @click="onClick(record.id)">查看详情</a-button>
+            <a-button success @click="onClick(record.code)">查看详情</a-button>
             </template>
         </a-table>
     </div>
 </template>
 
 <script>
-import ECharts from "vue-echarts";
+import boxContent from "@components/boxContent";
 
 export default {
   components: {
-    "v-chart": ECharts
+    boxContent
   },
   props: {
     type: {
@@ -110,6 +114,14 @@ export default {
     };
   },
   computed: {
+    boxContentDataMap() {
+      const map = {};
+      this.duPointFormulaData.forEach(item => {
+        map[item.code] = item;
+      });
+
+      return map;
+    },
     chartOptions() {
       debugger;
       return {
@@ -277,7 +289,14 @@ export default {
           }
         });
     },
-    onClick() {}
+    onClick(code) {
+      this.$message.error(`暂未支持(code:${code})`);
+      // this.$router.push({path: `${this.$route.path}/${code}`})
+    },
+    onBoxContentClick(code) {
+      this.$message.error(`暂未支持(code:${code})`);
+      // this.$router.push({path: `${this.$route.path}/${code}`})
+    }
   }
 };
 </script>
@@ -287,14 +306,12 @@ export default {
   display: flex;
   justify-content: center;
   height: 250px;
+  margin: 28px 0;
 }
 .box {
   position: relative;
-  height: 30px;
-  line-height: 28px;
   border: 1px solid #d7d8db;
   border-radius: 15px;
-  padding: 0 16px;
   color: #7b94fe;
   font-size: 12px;
   cursor: pointer;
@@ -358,5 +375,10 @@ export default {
   left: 50%;
   bottom: 0;
   transform: translate(-50%, 100%);
+}
+.fieldName {
+  font-size: 16px;
+  line-height: 16px;
+  color: #3664ff;
 }
 </style>

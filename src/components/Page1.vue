@@ -1,10 +1,10 @@
 <template>
     <div>
         <div>
-          <h1 :class="$style.fieldName">{{fieldName}}</h1>
+          <span :class="$style.fieldName">{{fieldName}}</span>
         </div>
 
-        <div>
+        <div :class="$style.setting">
           <a-select v-model="type" @change="getTableData">
             <a-select-option value="company">公司</a-select-option>
             <a-select-option value="region">地域</a-select-option>
@@ -15,9 +15,9 @@
           <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
         </div>
         
-        <a-table :columns="columns" :dataSource="dataSource">
+        <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
           <template slot="operation" slot-scope="text, record">
-            <a-button :type="chartTarget.includes(record.id) ? 'danger' : 'primary'" @click="onClickButton(record.id)">{{chartTarget.includes(record.id) ? '取消展示' : '展示'}}</a-button>
+            <a-button v-if="!record.isChild" :type="chartTarget.includes(record.id) ? 'danger' : 'primary'" @click="onClickButton(record.id)">{{chartTarget.includes(record.id) ? '取消展示' : '展示'}}</a-button>
           </template>
         </a-table>
     </div>
@@ -32,6 +32,9 @@ export default {
   },
   props: {
     field: {
+      type: String
+    },
+    code: {
       type: String
     }
   },
@@ -105,7 +108,8 @@ export default {
                     key: id + "|" + year,
                     company: name,
                     year,
-                    value
+                    value,
+                    isChild: true
                   },
                   ...prev
                 ],
@@ -149,7 +153,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "总额"
+            name: "金额(万元)"
           },
           {
             type: "value",
@@ -272,6 +276,19 @@ export default {
   align-items: center;
 }
 .chart {
-  width: 800px;
+  margin-top: 47px;
+  width: 900px !important;
+}
+.fieldName {
+  font-size: 16px;
+  line-height: 16px;
+  color: #3664ff;
+}
+.setting {
+  margin-top: 34px;
+}
+
+.table {
+  margin-top: 28px;
 }
 </style>

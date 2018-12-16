@@ -27,6 +27,7 @@ const routes = [
     children: [
       {
         path: "/workspace",
+        name: "workspace",
         component: Workspace
       },
       {
@@ -52,6 +53,11 @@ const routes = [
       {
         path: "/analysis/:field/:type/:year/:id/:companyId",
         component: Page3,
+        props: true
+      },
+      {
+        path: "/analysis/:field/:type/:year/:id/:companyId/:code",
+        component: Page1,
         props: true
       }
     ]

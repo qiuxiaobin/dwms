@@ -20,9 +20,8 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header :class="$style.header">
-        <div :class="$style.user">你好，{{userName}}！</div>
-        <a-icon :class="$style.poweroff" type="poweroff"></a-icon>
-        <a-icon :class="$style.profile" type="profile"></a-icon>
+        <span :class="$style.user">{{userName}}</span>
+        <a-icon :class="$style.logout" type="logout" @click="onLogoutClick"></a-icon>
       </a-layout-header>
       <a-layout-content :class="$style.content">
         <router-view></router-view>
@@ -107,6 +106,9 @@ export default {
         (prev, openKey) => (openKey == key && prev) || [...prev, key],
         []
       );
+    },
+    onLogoutClick() {
+      this.$message.error("暂不支持退出");
     }
   }
 };
@@ -115,6 +117,7 @@ export default {
 <style module>
 .container {
   min-height: 100vh;
+  background-color: #e5e5e5;
 }
 .title {
   display: flex;
@@ -135,14 +138,21 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding: 0;
   background-color: #fff;
 }
 .content {
-  margin: 16px 24px;
+  margin: 28px 23px 28px 25px;
+  padding: 23px 0 27px 24px;
+  background-color: #fff;
 }
-.poweroff,
-.profile,
 .user {
-  margin-right: 15px;
+  font-size: 16px;
+  color: #3664ff;
+  margin-right: 24px;
+}
+.logout {
+  margin-right: 41px;
+  cursor: pointer;
 }
 </style>
