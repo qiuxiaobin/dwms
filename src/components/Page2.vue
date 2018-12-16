@@ -4,11 +4,11 @@
           <h1 :class="$style.fieldName">{{fieldName}}</h1>
         </div>
 
-        <v-chart :class="$style.chart" :options="chartOptions"></v-chart>
+        <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
 
         <a-table :columns="columns" :dataSource="dataSource">
           <template slot="operation" slot-scope="text, record">
-            <a-button success @click="onClick(record.id)">{{record.name}}</a-button>
+            <a-button success @click="onButtonClick(record.id)">{{record.name}}</a-button>
           </template>
         </a-table>
     </div>
@@ -108,24 +108,27 @@ export default {
     }
   },
   created() {
-    this.$axios
-      .get("DW/Anu/getBarData", {
-        params: {
-          type: this.type,
-          field: this.field,
-          year: this.year
-        }
-      })
-      .then(({ data }) => {
-        if (data.flag > -1) {
-          this.barData = data.data;
-          this.$message.success(data.msg);
-        } else {
-          this.$message.error(data.msg);
-        }
-      });
+    this.getBarData();
   },
   methods: {
+    getBarData() {
+      this.$axios
+        .get("DW/Anu/getBarData", {
+          params: {
+            type: this.type,
+            field: this.field,
+            year: this.year
+          }
+        })
+        .then(({ data }) => {
+          if (data.flag > -1) {
+            this.barData = data.data;
+            this.$message.success(data.msg);
+          } else {
+            this.$message.error(data.msg);
+          }
+        });
+    },
     getFields() {
       this.$axios.get("DW/Anu/getAnuFields").then(({ data }) => {
         if (data.flag > -1) {
@@ -135,8 +138,20 @@ export default {
         }
       });
     },
-    onClick(id) {
-      this.$router.push({ name: "chart3", query: { id, year: this.year } });
+    onChartClick(params) {
+      const companyId = this.dataSource[params.dataIndex].id;
+      const path = `${this.$route.path}/${companyId}`;
+
+      this.$router.push({
+        path
+      });
+    },
+    onButtonClick(companyId) {
+      const path = `${this.$route.path}/${companyId}`;
+
+      this.$router.push({
+        path
+      });
     }
   }
 };

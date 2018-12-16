@@ -3,7 +3,7 @@ import Vue from "vue";
 import MenuView from "@components/MenuView";
 import Page1 from "@components/Page1";
 import Page2 from "@components/Page2";
-import Menu3 from "@components/Menu3";
+import Page3 from "@components/Page3";
 import Workspace from "@components/Workspace";
 import Login from "@components/Login";
 
@@ -45,8 +45,13 @@ const routes = [
         props: true
       },
       {
-        path: "/analysis/:field/:year",
-        component: Page1,
+        path: "/analysis/:field/:type/:year/:id",
+        component: Page2,
+        props: true
+      },
+      {
+        path: "/analysis/:field/:type/:year/:id/:companyId",
+        component: Page3,
         props: true
       }
     ]
