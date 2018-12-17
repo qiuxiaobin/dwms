@@ -4,6 +4,10 @@
           <span :class="$style.fieldName">{{fieldName}}</span>
         </div>
 
+        <div :class="$style.setting">
+          <a-button @click="onBackClick">返回</a-button>
+        </div>
+
         <div :class="$style.chartContainer">
           <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
         </div>
@@ -171,6 +175,9 @@ export default {
       this.$router.push({
         path
       });
+    },
+    onBackClick(){
+      this.$router.back();
     }
   }
 };
@@ -192,5 +199,8 @@ export default {
 }
 .table {
   margin-top: 28px;
+}
+.setting{
+  margin-top: 34px;
 }
 </style>

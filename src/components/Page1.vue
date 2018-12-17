@@ -15,8 +15,10 @@
           <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
         </div>
         
+        <a-input-search :class="$style.tableSearch" :placeholder="'请输入要查找的' + typeName" @search="onTableSearch"></a-input-search>
         <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
           <template slot="operation" slot-scope="text, record">
+            <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
             <a-button v-if="!record.isChild" :type="chartTarget.includes(record.id) ? 'danger' : 'primary'" @click="onClickButton(record.id)">{{chartTarget.includes(record.id) ? '取消展示' : '展示'}}</a-button>
           </template>
         </a-table>
@@ -46,7 +48,8 @@ export default {
       companys: [],
       regions: [],
       type: "company",
-      list: []
+      list: [],
+      searchName: ''
     };
   },
   computed: {
@@ -92,7 +95,7 @@ export default {
       );
     },
     dataSource() {
-      return this.tableData.map(({ id, name, data }) => ({
+      return this.tableData.filter(({name}) => name.indexOf(this.searchName) > -1).map(({ id, name, data }) => ({
         id,
         key: id + "|" + data[data.length - 1].year,
         company: name,
@@ -118,6 +121,21 @@ export default {
       }));
     },
     chartOptions() {
+      const series = [
+          ...(this.chartData.line || []).map(({ name, id, data }) => ({
+            name,
+            _id: id,
+            type: "line",
+            data
+          })),
+          ...(this.chartData.bar || []).map(({ name, id, data }) => ({
+            name,
+            _id: id,
+            type: "bar",
+            data: data.map(({ value }) => -value || null),
+            yAxisIndex: 1
+          }))
+        ];
       return {
         dataZoom: [
           {
@@ -125,7 +143,24 @@ export default {
             xAxisIndex: 0
           }
         ],
-        tooltip: {},
+        tooltip: {
+          formatter: params => {
+            if(params.seriesName == '最低值'){
+                return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+series[params.seriesIndex].data[params.dataIndex].company
+            }else if(params.seriesName == '最高值'){
+                return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+series[params.seriesIndex].data[params.dataIndex].company
+            }else if(params.seriesName == '平均值'){
+                return '年份：'+params.name+'<br>金额：'+params.value
+            }else{
+              if (params.seriesType == 'bar') {
+return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+params.seriesName
+                }else {
+
+                  return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+params.seriesName
+                }
+            }
+          }
+        },
         legend: {
           type: "scroll",
           data: (this.chartData.line || []).map(({ name }) => name)
@@ -163,21 +198,7 @@ export default {
             name: "排名"
           }
         ],
-        series: [
-          ...(this.chartData.line || []).map(({ name, id, data }) => ({
-            name,
-            _id: id,
-            type: "line",
-            data
-          })),
-          ...(this.chartData.bar || []).map(({ name, id, data }) => ({
-            name,
-            _id: id,
-            type: "bar",
-            data: data.map(({ value }) => -value || null),
-            yAxisIndex: 1
-          }))
-        ]
+        series
       };
     }
   },
@@ -202,6 +223,9 @@ export default {
     }
   },
   methods: {
+    onTableSearch(name){
+      this.searchName = name;
+    },
     onChartClick(params) {
       const id = this.chartOptions.series[params.seriesIndex]._id;
       const path = `${this.$route.path}/${this.type}/${params.name}/${id}`;
@@ -209,6 +233,9 @@ export default {
       this.$router.push({
         path
       });
+    },
+    onDetailClick(year, id){
+      this.$router.push({path:`${this.$route.path}/${this.type}/${year}/${id}`})
     },
     getFields() {
       this.$axios.get("/DW/Anu/getAnuFields").then(({ data }) => {
@@ -287,8 +314,13 @@ export default {
 .setting {
   margin-top: 34px;
 }
-
 .table {
   margin-top: 28px;
+}
+.tableSearch{
+  width: 200px;
+}
+.searchButton{
+  margin-right: 10px;
 }
 </style>

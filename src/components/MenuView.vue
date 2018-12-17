@@ -143,7 +143,7 @@ export default {
 }
 .content {
   margin: 28px 23px 28px 25px;
-  padding: 23px 0 27px 24px;
+  padding: 23px 24px 27px 24px;
   background-color: #fff;
 }
 .user {
