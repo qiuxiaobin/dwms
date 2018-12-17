@@ -1,72 +1,100 @@
 <template>
+  <div>
     <div>
-        <div>
-          <span :class="$style.fieldName">{{fieldName}}</span>
-        </div>
+      <span :class="$style.fieldName">{{fieldName}}</span>
+    </div>
 
-        <div :class="$style.chartContainer">
-          <div>
-            <div :class="$style.box">
-              <boxContent @click="onBoxContentClick" :data="boxContentDataMap.dupont"></boxContent>
-              <div :class="$style.yLineCenter">
-                <div :class="$style.xLine">
-                  <div :class="$style.yLineLeft">
-                    <div :class="$style.childBox">
-                      <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsRate">总资产收益率</boxContent>
-                      <div :class="$style.yLineCenter">
-                        <div :class="$style.xLine2">
-                            <div :class="$style.yLineLeft">
-                              <div :class="$style.childBox">
-                                <boxContent @click="onBoxContentClick" :data="boxContentDataMap.salesInterestRate">销售净利率</boxContent>
-                                <div :class="$style.yLineCenter">
-                                  <div :class="$style.xLine3">
-                                      <div :class="$style.yLineLeft">
-                                        <div :class="$style.childBox">
-                                          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.netProfit">净利润</boxContent> 
-                                        </div>
-                                      </div>
-                                      <div :class="$style.yLineRight">
-                                        <div :class="$style.childBox">
-                                          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsRate">销售收入</boxContent> 
-                                        </div>
-                                      </div>
-                                  </div>
+    <div :class="$style.chartContainer">
+      <div>
+        <div :class="$style.box">
+          <boxContent
+            @click="onBoxContentClick"
+            :data="boxContentDataMap.dupont"
+          ></boxContent>
+          <div :class="$style.yLineCenter">
+            <div :class="$style.xLine">
+              <div :class="$style.yLineLeft">
+                <div :class="$style.childBox">
+                  <boxContent
+                    @click="onBoxContentClick"
+                    :data="boxContentDataMap.totalAssetsRate"
+                  >总资产收益率</boxContent>
+                  <div :class="$style.yLineCenter">
+                    <div :class="$style.xLine2">
+                      <div :class="$style.yLineLeft">
+                        <div :class="$style.childBox">
+                          <boxContent
+                            @click="onBoxContentClick"
+                            :data="boxContentDataMap.salesInterestRate"
+                          >销售净利率</boxContent>
+                          <div :class="$style.yLineCenter">
+                            <div :class="$style.xLine3">
+                              <div :class="$style.yLineLeft">
+                                <div :class="$style.childBox">
+                                  <boxContent
+                                    @click="onBoxContentClick"
+                                    :data="boxContentDataMap.netProfit"
+                                  >净利润</boxContent>
+                                </div>
+                              </div>
+                              <div :class="$style.yLineRight">
+                                <div :class="$style.childBox">
+                                  <boxContent
+                                    @click="onBoxContentClick"
+                                    :data="boxContentDataMap.totalAssetsRate"
+                                  >销售收入</boxContent>
                                 </div>
                               </div>
                             </div>
-                            <div :class="$style.yLineRight">
-                              <div :class="$style.childBox">
-                                  <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssetsTurnover">总资产周转率</boxContent> 
-                                  <div :class="$style.yLineCenter">
-                                    <div :class="$style.xLine4">
-                                        <div :class="$style.yLineLeft">
-                                          <div :class="$style.childBox">
-                                            <boxContent @click="onBoxContentClick" :data="boxContentDataMap.salesRevenue">销售收入</boxContent> 
-                                          </div>
-                                        </div>
-                                        <div :class="$style.yLineRight">
-                                          <div :class="$style.childBox">
-                                            <boxContent @click="onBoxContentClick" :data="boxContentDataMap.totalAssets">资产总额</boxContent> 
-                                          </div>
-                                        </div>
-                                    </div>
-                                  </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div :class="$style.yLineRight">
+                        <div :class="$style.childBox">
+                          <boxContent
+                            @click="onBoxContentClick"
+                            :data="boxContentDataMap.totalAssetsTurnover"
+                          >总资产周转率</boxContent>
+                          <div :class="$style.yLineCenter">
+                            <div :class="$style.xLine4">
+                              <div :class="$style.yLineLeft">
+                                <div :class="$style.childBox">
+                                  <boxContent
+                                    @click="onBoxContentClick"
+                                    :data="boxContentDataMap.salesRevenue"
+                                  >销售收入</boxContent>
                                 </div>
+                              </div>
+                              <div :class="$style.yLineRight">
+                                <div :class="$style.childBox">
+                                  <boxContent
+                                    @click="onBoxContentClick"
+                                    :data="boxContentDataMap.totalAssets"
+                                  >资产总额</boxContent>
+                                </div>
+                              </div>
                             </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div :class="$style.yLineRight">
-                    <div :class="$style.childBox">
-                      <boxContent @click="onBoxContentClick" :data="boxContentDataMap.equityMultiplier">权益乘数</boxContent>
-                      <div :class="$style.yLineCenter">
-                        <div :class="$style.xLine5">
-                          <div :class="$style.yLineRight">
-                            <div :class="$style.childBox">
-                              <boxContent @click="onBoxContentClick" :data="boxContentDataMap.assetLiabilityRatio">=1/(1-资产负债率)</boxContent>
-                            </div>
-                          </div>
+                </div>
+              </div>
+              <div :class="$style.yLineRight">
+                <div :class="$style.childBox">
+                  <boxContent
+                    @click="onBoxContentClick"
+                    :data="boxContentDataMap.equityMultiplier"
+                  >权益乘数</boxContent>
+                  <div :class="$style.yLineCenter">
+                    <div :class="$style.xLine5">
+                      <div :class="$style.yLineRight">
+                        <div :class="$style.childBox">
+                          <boxContent
+                            @click="onBoxContentClick"
+                            :data="boxContentDataMap.assetLiabilityRatio"
+                          >=1/(1-资产负债率)</boxContent>
                         </div>
                       </div>
                     </div>
@@ -76,13 +104,24 @@
             </div>
           </div>
         </div>
-
-        <a-table :columns="columns" :dataSource="dataSource">
-            <template slot="operation" slot-scope="text, record">
-            <a-button success @click="onClick(record.code)">查看详情</a-button>
-            </template>
-        </a-table>
+      </div>
     </div>
+
+    <a-table
+      :columns="columns"
+      :dataSource="dataSource"
+    >
+      <template
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          success
+          @click="onClick(record.code)"
+        >查看详情</a-button>
+      </template>
+    </a-table>
+  </div>
 </template>
 
 <script>
@@ -121,70 +160,6 @@ export default {
       });
 
       return map;
-    },
-    chartOptions() {
-      debugger;
-      return {
-        tooltip: {
-          trigger: "item",
-          triggerOn: "mousemove"
-        },
-        series: [
-          {
-            type: "tree",
-
-            data: [
-              {
-                name: "asdd",
-                children: [
-                  {
-                    name: "343243",
-                    value: 300
-                  },
-                  {
-                    name: "gregerg",
-                    value: 400
-                  }
-                ]
-              }
-            ],
-
-            left: "2%",
-            right: "2%",
-            top: "8%",
-            bottom: "20%",
-
-            symbol: "emptyCircle",
-
-            orient: "vertical",
-
-            expandAndCollapse: true,
-
-            label: {
-              normal: {
-                position: "top",
-                rotate: -90,
-                verticalAlign: "middle",
-                align: "right",
-                fontSize: 9
-              }
-            },
-
-            leaves: {
-              label: {
-                normal: {
-                  position: "bottom",
-                  rotate: -90,
-                  verticalAlign: "middle",
-                  align: "left"
-                }
-              }
-            },
-
-            animationDurationUpdate: 750
-          }
-        ]
-      };
     },
     columns() {
       return [
@@ -290,11 +265,17 @@ export default {
         });
     },
     onClick(code) {
-      this.$message.error(`暂未支持(code:${code})`);
+      // this.$message.error(`暂未支持(code:${code})`);
+      this.$router.push({
+        path: `/analysis/${code}/company/${this.year}/${this.companyId}`
+      });
       // this.$router.push({path: `${this.$route.path}/${code}`})
     },
     onBoxContentClick(code) {
-      this.$message.error(`暂未支持(code:${code})`);
+      // this.$message.error(`暂未支持(code:${code})`);
+      this.$router.push({
+        path: `/analysis/${code}/company/${this.year}/${this.companyId}`
+      });
       // this.$router.push({path: `${this.$route.path}/${code}`})
     }
   }

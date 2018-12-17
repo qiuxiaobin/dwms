@@ -1,33 +1,60 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.banner">
-      <img :class="$style.logo" src="@assets/logo.png">
+      <img
+        :class="$style.logo"
+        src="@assets/logo.png"
+      >
       <div :class="$style.text">
         <div :class="$style.title">用户登录</div>
         <div :class="$style.description">信托数据仓库管理系统</div>
       </div>
     </div>
     <div :class="$style.content">
-      <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
-        <a-alert type="error" closable v-show="error" :message="error" showIcon/>
-        <a-form-item 
-          fieldDecoratorId="name" 
+      <a-form
+        @submit="onSubmit"
+        :autoFormCreate="(form) => this.form = form"
+      >
+        <a-alert
+          type="error"
+          closable
+          v-show="error"
+          :message="error"
+          showIcon
+        />
+        <a-form-item
+          fieldDecoratorId="name"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入账户名', whitespace: true}]}"
         >
           <a-input placeholder="admin">
-            <a-icon slot="suffix" type="user"></a-icon>
+            <a-icon
+              slot="suffix"
+              type="user"
+            ></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item
-          fieldDecoratorId="password" 
+          fieldDecoratorId="password"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码', whitespace: true}]}"
         >
-          <a-input placeholder="123456" type="password">
-            <a-icon slot="suffix" type="lock"></a-icon>
+          <a-input
+            placeholder="123456"
+            type="password"
+          >
+            <a-icon
+              slot="suffix"
+              type="lock"
+            ></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item>
-          <a-button :loading="logging" size="large" htmlType="submit" type="primary" block>登录</a-button>
+          <a-button
+            :loading="logging"
+            size="large"
+            htmlType="submit"
+            type="primary"
+            block
+          >登录</a-button>
         </a-form-item>
       </a-form>
     </div>
@@ -48,19 +75,29 @@ export default {
       this.form.validateFields(err => {
         if (err) return;
         this.logging = true;
+
+        const username = this.form.getFieldValue("name");
+        const password = this.form.getFieldValue("password");
         this.$axios
-          .post("/login", {
-            name: this.form.getFieldValue("name"),
-            password: this.form.getFieldValue("password")
-          })
+          .get(
+            `/DW/loginOrExit/checkLogin?username=${username}&password=${password}`,
+            {
+              username,
+              password
+            }
+          )
           .then(({ data }) => {
             this.logging = false;
-            if (data.code > -1) {
-              this.$router.push({ name: "index" });
-              this.$message.success(data.message, 3);
+            if (data.flag > -1) {
+              this.$message.success(data.msg);
+              this.$router.push({ name: "workspace" });
             } else {
-              this.error = data.message;
+              this.error = data.msg;
             }
+          })
+          .catch(data => {
+            this.logging = false;
+            this.$message.error(data.message || "系统错误");
           });
       });
     }

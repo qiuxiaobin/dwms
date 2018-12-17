@@ -1,28 +1,52 @@
 <template>
+  <div>
     <div>
-        <div>
-          <span :class="$style.fieldName">{{fieldName}}</span>
-        </div>
-
-        <div :class="$style.setting">
-          <a-select v-model="type" @change="getTableData">
-            <a-select-option value="company">公司</a-select-option>
-            <a-select-option value="region">地域</a-select-option>
-          </a-select>
-        </div>
-
-        <div :class="$style.chartContainer">
-          <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
-        </div>
-        
-        <a-input-search :class="$style.tableSearch" :placeholder="'请输入要查找的' + typeName" @search="onTableSearch"></a-input-search>
-        <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
-          <template slot="operation" slot-scope="text, record">
-            <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
-            <a-button v-if="!record.isChild" :type="chartTarget.includes(record.id) ? 'danger' : 'primary'" @click="onClickButton(record.id)">{{chartTarget.includes(record.id) ? '取消展示' : '展示'}}</a-button>
-          </template>
-        </a-table>
+      <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
+    <div :class="$style.setting">
+      <a-select
+        v-model="type"
+        @change="getTableData"
+      >
+        <a-select-option value="company">公司</a-select-option>
+        <a-select-option value="region">地域</a-select-option>
+      </a-select>
+      <a-checkbox v-model="showRank">显示排名</a-checkbox>
+    </div>
+    <div :class="$style.chartContainer">
+      <v-chart
+        :class="$style.chart"
+        ref="chart"
+        :options="chartOptions"
+        @click="onChartClick"
+      ></v-chart>
+    </div>
+    <a-input-search
+      :class="$style.tableSearch"
+      :placeholder="'请输入要查找的' + typeName"
+      @search="onTableSearch"
+    ></a-input-search>
+    <a-table
+      :class="$style.table"
+      :columns="columns"
+      :dataSource="dataSource"
+    >
+      <template
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          :class="$style.searchButton"
+          @click="onDetailClick(record.year, record.id)"
+        >查看详情</a-button>
+        <a-button
+          v-if="!record.isChild"
+          :type="chartTarget.includes(record.id) ? 'danger' : 'primary'"
+          @click="onClickButton(record.id)"
+        >{{chartTarget.includes(record.id) ? '取消展示' : '展示'}}</a-button>
+      </template>
+    </a-table>
+  </div>
 </template>
 
 <script>
@@ -49,7 +73,8 @@ export default {
       regions: [],
       type: "company",
       list: [],
-      searchName: ''
+      searchName: "",
+      showRank: false
     };
   },
   computed: {
@@ -95,69 +120,104 @@ export default {
       );
     },
     dataSource() {
-      return this.tableData.filter(({name}) => name.indexOf(this.searchName) > -1).map(({ id, name, data }) => ({
-        id,
-        key: id + "|" + data[data.length - 1].year,
-        company: name,
-        year: data[data.length - 1].year,
-        value: data[data.length - 1].value,
-        children: data.reduce(
-          (prev, { year, value }, index) =>
-            index == data.length - 1
-              ? prev
-              : [
-                  {
-                    id,
-                    key: id + "|" + year,
-                    company: name,
-                    year,
-                    value,
-                    isChild: true
-                  },
-                  ...prev
-                ],
-          []
-        )
-      }));
+      return this.tableData
+        .filter(({ name }) => name.indexOf(this.searchName) > -1)
+        .map(({ id, name, data }) => ({
+          id,
+          key: id + "|" + data[data.length - 1].year,
+          company: name,
+          year: data[data.length - 1].year,
+          value: data[data.length - 1].value,
+          children: data.reduce(
+            (prev, { year, value }, index) =>
+              index == data.length - 1
+                ? prev
+                : [
+                    {
+                      id,
+                      key: id + "|" + year,
+                      company: name,
+                      year,
+                      value,
+                      isChild: true
+                    },
+                    ...prev
+                  ],
+            []
+          )
+        }));
     },
     chartOptions() {
-      const series = [
-          ...(this.chartData.line || []).map(({ name, id, data }) => ({
-            name,
-            _id: id,
-            type: "line",
-            data
-          })),
-          ...(this.chartData.bar || []).map(({ name, id, data }) => ({
-            name,
-            _id: id,
-            type: "bar",
-            data: data.map(({ value }) => -value || null),
-            yAxisIndex: 1
-          }))
-        ];
+      let series = [
+        ...(this.chartData.line || []).map(({ name, id, data }) => ({
+          name,
+          _id: id,
+          type: "line",
+          data
+        }))
+      ];
+
+      series = this.showRank
+        ? [
+            ...series,
+            ...(this.chartData.bar || []).map(({ name, id, data }) => ({
+              name,
+              _id: id,
+              type: "bar",
+              data: data.map(({ value }) => -value || null),
+              yAxisIndex: 1
+            }))
+          ]
+        : series;
+
       return {
         dataZoom: [
           {
-            type: "inside",
-            xAxisIndex: 0
+            type: "inside"
           }
         ],
         tooltip: {
           formatter: params => {
-            if(params.seriesName == '最低值'){
-                return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+series[params.seriesIndex].data[params.dataIndex].company
-            }else if(params.seriesName == '最高值'){
-                return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+series[params.seriesIndex].data[params.dataIndex].company
-            }else if(params.seriesName == '平均值'){
-                return '年份：'+params.name+'<br>金额：'+params.value
-            }else{
-              if (params.seriesType == 'bar') {
-return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+params.seriesName
-                }else {
-
-                  return '年份：'+params.name+'<br>金额：'+params.value+'<br>公司：'+params.seriesName
-                }
+            if (params.seriesName == "最低值") {
+              return (
+                "年份：" +
+                params.name +
+                "<br>最低值：" +
+                params.value +
+                "<br>公司：" +
+                series[params.seriesIndex].data[params.dataIndex].company
+              );
+            } else if (params.seriesName == "最高值") {
+              return (
+                "年份：" +
+                params.name +
+                "<br>最高值：" +
+                params.value +
+                "<br>公司：" +
+                series[params.seriesIndex].data[params.dataIndex].company
+              );
+            } else if (params.seriesName == "平均值") {
+              return "年份：" + params.name + "<br>平均值：" + params.value;
+            } else {
+              if (params.seriesType == "bar") {
+                return (
+                  "年份：" +
+                  params.name +
+                  "<br>排名：" +
+                  -params.value +
+                  "<br>公司：" +
+                  params.seriesName
+                );
+              } else {
+                return (
+                  "年份：" +
+                  params.name +
+                  "<br>金额：" +
+                  params.value +
+                  "<br>公司：" +
+                  params.seriesName
+                );
+              }
             }
           }
         },
@@ -190,13 +250,15 @@ return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+p
             type: "value",
             name: "金额(万元)"
           },
-          {
-            type: "value",
-            axisLabel: {
-              formatter: value => -value
-            },
-            name: "排名"
-          }
+          this.showRank
+            ? {
+                type: "value",
+                axisLabel: {
+                  formatter: value => -value
+                },
+                name: "排名"
+              }
+            : null
         ],
         series
       };
@@ -223,7 +285,7 @@ return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+p
     }
   },
   methods: {
-    onTableSearch(name){
+    onTableSearch(name) {
       this.searchName = name;
     },
     onChartClick(params) {
@@ -234,8 +296,10 @@ return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+p
         path
       });
     },
-    onDetailClick(year, id){
-      this.$router.push({path:`${this.$route.path}/${this.type}/${year}/${id}`})
+    onDetailClick(year, id) {
+      this.$router.push({
+        path: `${this.$route.path}/${this.type}/${year}/${id}`
+      });
     },
     getFields() {
       this.$axios.get("/DW/Anu/getAnuFields").then(({ data }) => {
@@ -317,10 +381,10 @@ return '年份：'+params.name+'<br>排名：'+(-params.value)+'<br>公司：'+p
 .table {
   margin-top: 28px;
 }
-.tableSearch{
+.tableSearch {
   width: 200px;
 }
-.searchButton{
+.searchButton {
   margin-right: 10px;
 }
 </style>

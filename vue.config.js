@@ -12,5 +12,6 @@ module.exports = {
     config.resolve.alias
       .set("@components", resolve("src/components"))
       .set("@assets", resolve("src/assets"));
-  }
+  },
+  productionSourceMap: false
 };
