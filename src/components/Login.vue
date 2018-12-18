@@ -1,55 +1,38 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.banner">
-      <img
-        :class="$style.logo"
-        src="@assets/logo.png"
-      >
+      <img :class="$style.logo" src="@assets/logo.png">
+      <a :class="$style.help">寻求帮助</a>
       <div :class="$style.text">
         <div :class="$style.title">用户登录</div>
         <div :class="$style.description">信托数据仓库管理系统</div>
       </div>
     </div>
     <div :class="$style.content">
-      <a-form
-        @submit="onSubmit"
-        :autoFormCreate="(form) => this.form = form"
-      >
-        <a-alert
-          type="error"
-          closable
-          v-show="error"
-          :message="error"
-          showIcon
-        />
+      <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
+        <a-alert type="error" closable v-show="error" :message="error" showIcon/>
         <a-form-item
+          :class="$style.loginInput"
           fieldDecoratorId="name"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入账户名', whitespace: true}]}"
         >
-          <a-input placeholder="admin">
-            <a-icon
-              slot="suffix"
-              type="user"
-            ></a-icon>
+          <a-input placeholder="同牛账号">
+            <a-icon slot="suffix" type="user"></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item
+          :class="$style.loginInput"
           fieldDecoratorId="password"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码', whitespace: true}]}"
         >
-          <a-input
-            placeholder="123456"
-            type="password"
-          >
-            <a-icon
-              slot="suffix"
-              type="lock"
-            ></a-icon>
+          <a-input placeholder="请输入密码" type="password">
+            <a-icon slot="suffix" type="lock"></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item>
           <a-button
             :loading="logging"
+            :class="$style.loginBtn"
             size="large"
             htmlType="submit"
             type="primary"
@@ -58,7 +41,7 @@
         </a-form-item>
       </a-form>
     </div>
-    <div :class="$style.footer">Copyright@2018 tn</div>
+    <div :class="$style.footer">同牛科技 TN-TECH</div>
   </div>
 </template>
 
@@ -113,22 +96,23 @@ export default {
 }
 .banner {
   position: relative;
-  flex: 1 0 auto;
+  height: 372px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background: url(@assets/banner.jpg) no-repeat center;
+  background: url(@assets/banner.png) no-repeat top;
 }
 .content {
   flex: 1;
   width: 400px;
-  margin: 70px auto 0;
+  margin: 50px auto 0;
 }
 .footer {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 20px 0;
+  color: #9d9fa0;
 }
 .text {
   padding: 50px 0;
@@ -136,17 +120,39 @@ export default {
 }
 .title {
   color: #fff;
-  font-size: 34px;
+  font-size: 30px;
 }
 .description {
-  color: #ccc;
+  color: #e1e1e2;
   font-size: 20px;
 }
 .logo {
   position: absolute;
-  left: 25px;
-  top: 25px;
-  width: 60px;
-  height: 60px;
+  left: 60px;
+  top: 60px;
+  width: 149px;
+  height: 40px;
+}
+.help {
+  position: absolute;
+  top: 71px;
+  right: 64px;
+  color: #d0d1d2;
+  font-size: 14px;
+}
+.loginInput input {
+  height: 54px;
+  font-size: 14px !important;
+  padding-left: 16px;
+  color: #c5c5c5;
+}
+.loginBtn {
+  width: 400px;
+  height: 54px;
+  background: linear-gradient(89deg, rgba(0, 158, 250, 1), rgba(0, 97, 237, 1));
+  border-radius: 6px;
+}
+.loginBtn:hover {
+  background: linear-gradient(89deg, rgba(0, 158, 250, 1), rgba(0, 97, 237, 1));
 }
 </style>
