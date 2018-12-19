@@ -12,20 +12,18 @@
       <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
         <a-alert type="error" closable v-show="error" :message="error" showIcon/>
         <a-form-item
-          :class="$style.loginInput"
           fieldDecoratorId="name"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入账户名', whitespace: true}]}"
         >
-          <a-input placeholder="同牛账号">
+          <a-input placeholder="同牛账号" :class="$style.loginInput">
             <a-icon slot="suffix" type="user"></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item
-          :class="$style.loginInput"
           fieldDecoratorId="password"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码', whitespace: true}]}"
         >
-          <a-input placeholder="请输入密码" type="password">
+          <a-input placeholder="请输入密码" type="password" :class="$style.loginInput">
             <a-icon slot="suffix" type="lock"></a-icon>
           </a-input>
         </a-form-item>
@@ -97,14 +95,17 @@ export default {
 .banner {
   position: relative;
   height: 372px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   background: url(@assets/banner.png) no-repeat top;
+  background-size: 100% auto;
 }
 .content {
   flex: 1;
-  width: 400px;
+  min-width: 350px;
+  width: 25%;
   margin: 50px auto 0;
 }
 .footer {
@@ -140,14 +141,13 @@ export default {
   color: #d0d1d2;
   font-size: 14px;
 }
-.loginInput input {
+.loginInput {
   height: 54px;
   font-size: 14px !important;
-  padding-left: 16px;
   color: #c5c5c5;
 }
 .loginBtn {
-  width: 400px;
+  width: 100%;
   height: 54px;
   background: linear-gradient(89deg, rgba(0, 158, 250, 1), rgba(0, 97, 237, 1));
   border-radius: 6px;

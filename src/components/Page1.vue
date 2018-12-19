@@ -36,7 +36,7 @@
 
 <script>
 import ECharts from "vue-echarts";
-
+import { formatterNumber } from "@utils";
 export default {
   components: {
     "v-chart": ECharts
@@ -122,7 +122,7 @@ export default {
           key: id + "|" + data[data.length - 1].year,
           company: name,
           year: data[data.length - 1].year,
-          value: formatterNumber(data[data.length - 1].value),
+          value: formatterNumber(data[data.length - 1].value, this.unit),
           children: data.reduce(
             (prev, { year, value }, index) =>
               index == data.length - 1
@@ -133,7 +133,7 @@ export default {
                       key: id + "|" + year,
                       company: name,
                       year,
-                      value: formatterNumber(value),
+                      value: formatterNumber(value, this.unit),
                       isChild: true
                     },
                     ...prev
@@ -159,6 +159,7 @@ export default {
               name,
               _id: id,
               type: "bar",
+              barMaxWidth: "35",
               data: data.map(({ value }) => -value || null),
               yAxisIndex: 1
             }))
@@ -178,7 +179,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最低值：" +
-                formatterNumber(params.value) +
+                formatterNumber(params.value, this.unit) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
@@ -187,7 +188,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最高值：" +
-                formatterNumber(params.value) +
+                formatterNumber(params.value, this.unit) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
@@ -196,7 +197,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>平均值：" +
-                formatterNumber(params.value)
+                formatterNumber(params.value, this.unit)
               );
             } else {
               if (params.seriesType == "bar") {
@@ -212,8 +213,10 @@ export default {
                 return (
                   "年份：" +
                   params.name +
-                  "<br>金额：" +
-                  formatterNumber(params.value) +
+                  "<br>" +
+                  (this.type != "company" ? "平均值" : "金额") +
+                  "：" +
+                  formatterNumber(params.value, this.unit) +
                   "<br>公司：" +
                   params.seriesName
                 );
@@ -228,21 +231,24 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: [
-              2005,
-              2006,
-              2007,
-              2008,
-              2009,
-              2010,
-              2011,
-              2012,
-              2013,
-              2014,
-              2015,
-              2016,
-              2017
-            ]
+            data: this.chartData.bar
+              ? this.chartData.bar[0].data.map(({ year }) => year)
+              : []
+            // data: [
+            //   2005,
+            //   2006,
+            //   2007,
+            //   2008,
+            //   2009,
+            //   2010,
+            //   2011,
+            //   2012,
+            //   2013,
+            //   2014,
+            //   2015,
+            //   2016,
+            //   2017
+            // ]
           }
         ],
         yAxis: [
@@ -318,14 +324,13 @@ export default {
         .get("/DW/Anu/getLineBarChartData", {
           params: {
             field: this.field,
-            showCompanys: this.companys.join(","),
-            rankCompanys: this.companys.join(","),
+            showCompanys: this.chartTarget.join(","),
+            rankCompanys: this.chartTarget.join(","),
             type: this.type
           }
         })
         .then(({ data }) => {
           if (data.flag > -1) {
-            unit = data.unit;
             this.unit = data.unit;
             this.chartData = data.data;
           } else {
@@ -362,18 +367,6 @@ export default {
     }
   }
 };
-var unit = "";
-function formatterNumber(val) {
-  if (unit != "%") {
-    var nums = String(val).split(".");
-    var num = nums[0];
-    var float = nums[1] ? nums[1] : "";
-    num = parseInt(num).toLocaleString();
-    return num + "." + float;
-  } else {
-    return val;
-  }
-}
 </script>
 
 <style module>
@@ -397,6 +390,9 @@ function formatterNumber(val) {
 }
 .table {
   margin-top: 28px;
+}
+.table td {
+  padding: 10px 16px !important;
 }
 .tableSearch {
   width: 200px;

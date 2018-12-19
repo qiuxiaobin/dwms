@@ -7,12 +7,10 @@
     <div :class="$style.chartContainer">
       <div>
         <div :class="$style.box">
-          <boxContent
-            @click="onBoxContentClick"
-            :data="boxContentDataMap.dupont"
-          ></boxContent>
+          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.dupont"></boxContent>
           <div :class="$style.yLineCenter">
             <div :class="$style.xLine">
+              <img :class="$style.methodIcon" src="@assets/ride.png">
               <div :class="$style.yLineLeft">
                 <div :class="$style.childBox">
                   <boxContent
@@ -21,6 +19,7 @@
                   >总资产收益率</boxContent>
                   <div :class="$style.yLineCenter">
                     <div :class="$style.xLine2">
+                      <img :class="$style.methodIcon" src="@assets/ride.png">
                       <div :class="$style.yLineLeft">
                         <div :class="$style.childBox">
                           <boxContent
@@ -29,6 +28,7 @@
                           >销售净利率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine3">
+                              <img :class="$style.methodIcon" src="@assets/except.png">
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -57,6 +57,7 @@
                           >总资产周转率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine4">
+                              <img :class="$style.methodIcon" src="@assets/except.png">
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -107,18 +108,9 @@
       </div>
     </div>
 
-    <a-table
-      :columns="columns"
-      :dataSource="dataSource"
-    >
-      <template
-        slot="operation"
-        slot-scope="text, record"
-      >
-        <a-button
-          success
-          @click="onClick(record.code)"
-        >查看详情</a-button>
+    <a-table :columns="columns" :dataSource="dataSource" :class="$style.table">
+      <template slot="operation" slot-scope="text, record">
+        <a-button success @click="onClick(record.code)">查看详情</a-button>
       </template>
     </a-table>
   </div>
@@ -361,5 +353,16 @@ export default {
   font-size: 16px;
   line-height: 16px;
   color: #3664ff;
+}
+.methodIcon {
+  position: absolute;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  top: 25px;
+}
+.table td {
+  padding: 10px 16px !important;
 }
 </style>

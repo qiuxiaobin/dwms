@@ -91,9 +91,28 @@ export default {
         },
         series: [
           {
-            data: this.dataSource.map(({ data }) => data),
             type: "bar",
-            barMaxWidth: "35"
+            itemStyle: {
+              normal: {
+                color: new ECharts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: "#43BEFE" },
+                  { offset: 1, color: "#37A2DA" }
+                ])
+              },
+              emphasis: {
+                color: new ECharts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: "#37A2DA" },
+                  { offset: 1, color: "#43BEFE" }
+                ])
+              },
+              color: "#38ADFF"
+            },
+            barMaxWidth: "35",
+            data: this.dataSource.map(({ data, id }) =>
+              id == this.id
+                ? { value: data, itemStyle: { color: "#FFE383" } }
+                : data
+            )
           }
         ]
       };
@@ -200,6 +219,9 @@ export default {
 }
 .table {
   margin-top: 28px;
+}
+.table td {
+  padding: 10px 16px;
 }
 .setting {
   margin-top: 34px;
