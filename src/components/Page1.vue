@@ -177,6 +177,7 @@ export default {
               name,
               _id: id,
               type: "bar",
+              barMaxWidth: "35",
               data: data.map(({ value }) => -value || null),
               yAxisIndex: 1
             }))
@@ -230,7 +231,9 @@ export default {
                 return (
                   "年份：" +
                   params.name +
-                  "<br>金额：" +
+                  "<br>" +
+                  (this.type != "company" ? "平均值" : "金额") +
+                  "：" +
                   formatterNumber(params.value, this.unit) +
                   "<br>公司：" +
                   params.seriesName
@@ -246,21 +249,24 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: [
-              2005,
-              2006,
-              2007,
-              2008,
-              2009,
-              2010,
-              2011,
-              2012,
-              2013,
-              2014,
-              2015,
-              2016,
-              2017
-            ]
+            data: this.chartData.bar
+              ? this.chartData.bar[0].data.map(({ year }) => year)
+              : []
+            // data: [
+            //   2005,
+            //   2006,
+            //   2007,
+            //   2008,
+            //   2009,
+            //   2010,
+            //   2011,
+            //   2012,
+            //   2013,
+            //   2014,
+            //   2015,
+            //   2016,
+            //   2017
+            // ]
           }
         ],
         yAxis: [
@@ -402,6 +408,9 @@ export default {
 }
 .table {
   margin-top: 28px;
+}
+.table td {
+  padding: 10px 16px !important;
 }
 .tableSearch {
   width: 200px;

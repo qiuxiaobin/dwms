@@ -2,18 +2,9 @@
   <a-layout :class="$style.container">
     <a-layout-sider>
       <div :class="$style.title">
-        <img
-          :class="$style.logo"
-          src="@assets/logo.png"
-        >
-        <span>信托数据仓库管理系统</span>
+        <img :class="$style.logo" src="@assets/menuLogo.png">
       </div>
-      <a-menu
-        theme="dark"
-        mode="inline"
-        :selected-keys="[field]"
-        :open-keys="openKeys"
-      >
+      <a-menu theme="dark" mode="inline" :selected-keys="[field]" :open-keys="openKeys">
         <template v-for="menuItem in menuList">
           <a-sub-menu
             :key="menuItem.field"
@@ -29,11 +20,7 @@
               <span>{{subMenuItem.title}}</span>
             </a-menu-item>
           </a-sub-menu>
-          <a-menu-item
-            :key="menuItem.field"
-            v-else
-            @click="onMenuItemClick(menuItem.field)"
-          >
+          <a-menu-item :key="menuItem.field" v-else @click="onMenuItemClick(menuItem.field)">
             <span>{{menuItem.title}}</span>
           </a-menu-item>
         </template>
@@ -42,11 +29,7 @@
     <a-layout>
       <a-layout-header :class="$style.header">
         <span :class="$style.user">{{userName}}</span>
-        <a-icon
-          :class="$style.logout"
-          type="logout"
-          @click="onLogoutClick"
-        ></a-icon>
+        <a-icon :class="$style.logout" type="logout" @click="onLogoutClick"></a-icon>
       </a-layout-header>
       <a-layout-content :class="$style.content">
         <router-view></router-view>
@@ -143,20 +126,24 @@ export default {
   min-height: 100vh;
   background-color: #e5e5e5;
 }
+.layoutSider {
+  background: #242a33;
+}
+.menuSider {
+  color: #242a33;
+}
 .title {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 60px;
   line-height: 60px;
-  font-size: 14px;
+  font-size: 13px;
   color: #fff;
-  background-color: #002140;
+  background-color: #3664ff;
 }
 .logo {
-  width: 16px;
-  height: 16px;
-  margin-right: 10px;
+  width: 170px;
 }
 .header {
   display: flex;

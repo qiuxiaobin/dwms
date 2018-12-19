@@ -120,14 +120,17 @@ export default {
 .banner {
   position: relative;
   height: 372px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   background: url(@assets/banner.png) no-repeat top;
+  background-size: 100% auto;
 }
 .content {
   flex: 1;
-  width: 400px;
+  min-width: 350px;
+  width: 25%;
   margin: 50px auto 0;
 }
 .footer {
@@ -166,11 +169,10 @@ export default {
 .loginInput {
   height: 54px;
   font-size: 14px !important;
-  padding-left: 16px;
   color: #c5c5c5;
 }
 .loginBtn {
-  width: 400px;
+  width: 100%;
   height: 54px;
   background: linear-gradient(89deg, rgba(0, 158, 250, 1), rgba(0, 97, 237, 1));
   border-radius: 6px;
