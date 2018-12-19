@@ -1,3 +1,3 @@
 <template>
-    <div class="index">Index</div>
+  <div>欢迎。</div>
 </template>
