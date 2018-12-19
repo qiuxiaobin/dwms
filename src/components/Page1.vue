@@ -4,7 +4,10 @@
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
     <div :class="$style.setting">
-      <a-select v-model="type" @change="getTableData">
+      <a-select
+        v-model="type"
+        @change="getTableData"
+      >
         <a-select-option value="company">公司</a-select-option>
         <a-select-option value="region">地域</a-select-option>
         <a-select-option value="nature">公司性质</a-select-option>
@@ -14,16 +17,31 @@
       <a-checkbox v-model="showRank">显示排名</a-checkbox>
     </div>
     <div :class="$style.chartContainer">
-      <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
+      <v-chart
+        :class="$style.chart"
+        ref="chart"
+        :options="chartOptions"
+        @click="onChartClick"
+      ></v-chart>
     </div>
     <a-input-search
       :class="$style.tableSearch"
       :placeholder="'请输入要查找的' + typeName"
       @search="onTableSearch"
     ></a-input-search>
-    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
-      <template slot="operation" slot-scope="text, record">
-        <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
+    <a-table
+      :class="$style.table"
+      :columns="columns"
+      :dataSource="dataSource"
+    >
+      <template
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          :class="$style.searchButton"
+          @click="onDetailClick(record.year, record.id)"
+        >查看详情</a-button>
         <a-button
           v-if="!record.isChild"
           :type="chartTarget.includes(record.id) ? 'danger' : 'primary'"
@@ -36,7 +54,7 @@
 
 <script>
 import ECharts from "vue-echarts";
-
+import { formatterNumber } from "@utils";
 export default {
   components: {
     "v-chart": ECharts
@@ -122,7 +140,7 @@ export default {
           key: id + "|" + data[data.length - 1].year,
           company: name,
           year: data[data.length - 1].year,
-          value: formatterNumber(data[data.length - 1].value),
+          value: formatterNumber(data[data.length - 1].value, this.unit),
           children: data.reduce(
             (prev, { year, value }, index) =>
               index == data.length - 1
@@ -133,7 +151,7 @@ export default {
                       key: id + "|" + year,
                       company: name,
                       year,
-                      value: formatterNumber(value),
+                      value: formatterNumber(value, this.unit),
                       isChild: true
                     },
                     ...prev
@@ -178,7 +196,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最低值：" +
-                formatterNumber(params.value) +
+                formatterNumber(params.value, this.unit) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
@@ -187,7 +205,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最高值：" +
-                formatterNumber(params.value) +
+                formatterNumber(params.value, this.unit) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
@@ -196,7 +214,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>平均值：" +
-                formatterNumber(params.value)
+                formatterNumber(params.value, this.unit)
               );
             } else {
               if (params.seriesType == "bar") {
@@ -213,7 +231,7 @@ export default {
                   "年份：" +
                   params.name +
                   "<br>金额：" +
-                  formatterNumber(params.value) +
+                  formatterNumber(params.value, this.unit) +
                   "<br>公司：" +
                   params.seriesName
                 );
@@ -318,14 +336,13 @@ export default {
         .get("/DW/Anu/getLineBarChartData", {
           params: {
             field: this.field,
-            showCompanys: this.companys.join(","),
-            rankCompanys: this.companys.join(","),
+            showCompanys: this.chartTarget.join(","),
+            rankCompanys: this.chartTarget.join(","),
             type: this.type
           }
         })
         .then(({ data }) => {
           if (data.flag > -1) {
-            unit = data.unit;
             this.unit = data.unit;
             this.chartData = data.data;
           } else {
@@ -362,18 +379,6 @@ export default {
     }
   }
 };
-var unit = "";
-function formatterNumber(val) {
-  if (unit != "%") {
-    var nums = String(val).split(".");
-    var num = nums[0];
-    var float = nums[1] ? nums[1] : "";
-    num = parseInt(num).toLocaleString();
-    return num + "." + float;
-  } else {
-    return val;
-  }
-}
 </script>
 
 <style module>

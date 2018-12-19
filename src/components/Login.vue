@@ -1,7 +1,10 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.banner">
-      <img :class="$style.logo" src="@assets/logo.png">
+      <img
+        :class="$style.logo"
+        src="@assets/logo.png"
+      >
       <a :class="$style.help">寻求帮助</a>
       <div :class="$style.text">
         <div :class="$style.title">用户登录</div>
@@ -9,24 +12,44 @@
       </div>
     </div>
     <div :class="$style.content">
-      <a-form @submit="onSubmit" :autoFormCreate="(form) => this.form = form">
-        <a-alert type="error" closable v-show="error" :message="error" showIcon/>
+      <a-form
+        @submit="onSubmit"
+        :autoFormCreate="(form) => this.form = form"
+      >
+        <a-alert
+          type="error"
+          closable
+          v-show="error"
+          :message="error"
+          showIcon
+        />
         <a-form-item
-          :class="$style.loginInput"
           fieldDecoratorId="name"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入账户名', whitespace: true}]}"
         >
-          <a-input placeholder="同牛账号">
-            <a-icon slot="suffix" type="user"></a-icon>
+          <a-input
+            placeholder="同牛账号"
+            :class="$style.loginInput"
+          >
+            <a-icon
+              slot="suffix"
+              type="user"
+            ></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item
-          :class="$style.loginInput"
           fieldDecoratorId="password"
           :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入密码', whitespace: true}]}"
         >
-          <a-input placeholder="请输入密码" type="password">
-            <a-icon slot="suffix" type="lock"></a-icon>
+          <a-input
+            placeholder="请输入密码"
+            type="password"
+            :class="$style.loginInput"
+          >
+            <a-icon
+              slot="suffix"
+              type="lock"
+            ></a-icon>
           </a-input>
         </a-form-item>
         <a-form-item>
@@ -140,7 +163,7 @@ export default {
   color: #d0d1d2;
   font-size: 14px;
 }
-.loginInput input {
+.loginInput {
   height: 54px;
   font-size: 14px !important;
   padding-left: 16px;

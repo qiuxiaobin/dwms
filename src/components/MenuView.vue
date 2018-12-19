@@ -65,7 +65,7 @@ export default {
   },
   data() {
     return {
-      userName: "",
+      userName: "John Chan",
       menuList: [
         {
           field: "workspace",
@@ -114,13 +114,6 @@ export default {
       ],
       openKeys: ["report", "analysis"]
     };
-  },
-  created() {
-    this.$axios.get("/user").then(({ data }) => {
-      if (data.code > -1) {
-        this.userName = data.data.name;
-      }
-    });
   },
   methods: {
     onMenuItemClick(name, field) {
