@@ -1,4 +1,8 @@
 export function formatterNumber(val, unit) {
+  if (val === null) {
+    return val;
+  }
+
   if (unit != "%") {
     const nums = String(val).split(".");
     let num = nums[0];
