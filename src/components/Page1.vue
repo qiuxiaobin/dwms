@@ -4,7 +4,10 @@
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
     <div :class="$style.setting">
-      <a-select v-model="type" @change="getTableData">
+      <a-select
+        v-model="type"
+        @change="getTableData"
+      >
         <a-select-option value="company">公司</a-select-option>
         <a-select-option value="region">地域</a-select-option>
         <a-select-option value="nature">公司性质</a-select-option>
@@ -14,16 +17,31 @@
       <a-checkbox v-model="showRank">显示排名</a-checkbox>
     </div>
     <div :class="$style.chartContainer">
-      <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
+      <v-chart
+        :class="$style.chart"
+        ref="chart"
+        :options="chartOptions"
+        @click="onChartClick"
+      ></v-chart>
     </div>
     <a-input-search
       :class="$style.tableSearch"
       :placeholder="'请输入要查找的' + typeName"
       @search="onTableSearch"
     ></a-input-search>
-    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
-      <template slot="operation" slot-scope="text, record">
-        <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
+    <a-table
+      :class="$style.table"
+      :columns="columns"
+      :dataSource="dataSource"
+    >
+      <template
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          :class="$style.searchButton"
+          @click="onDetailClick(record.year, record.id)"
+        >查看详情</a-button>
         <a-button
           v-if="!record.isChild"
           :type="chartTarget.includes(record.id) ? 'danger' : 'primary'"
