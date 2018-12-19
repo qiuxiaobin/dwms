@@ -1,23 +1,23 @@
 <template>
+  <div>
     <div>
-        <div>
-          <span :class="$style.fieldName">{{fieldName}}</span>
-        </div>
-
-        <div :class="$style.setting">
-          <a-button @click="onBackClick">返回</a-button>
-        </div>
-
-        <div :class="$style.chartContainer">
-          <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
-        </div>
-
-        <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
-          <template v-if="field == 'dupont'" slot="operation" slot-scope="text, record">
-            <a-button success @click="onButtonClick(record.id)">查看详情</a-button>
-          </template>
-        </a-table>
+      <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
+
+    <div :class="$style.setting">
+      <a-button @click="onBackClick">返回</a-button>
+    </div>
+
+    <div :class="$style.chartContainer">
+      <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
+    </div>
+
+    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
+      <template v-if="field == 'dupont'" slot="operation" slot-scope="text, record">
+        <a-button success @click="onButtonClick(record.id)">查看详情</a-button>
+      </template>
+    </a-table>
+  </div>
 </template>
 
 <script>
@@ -92,7 +92,8 @@ export default {
         series: [
           {
             data: this.dataSource.map(({ data }) => data),
-            type: "bar"
+            type: "bar",
+            barMaxWidth: "35"
           }
         ]
       };
@@ -176,7 +177,7 @@ export default {
         path
       });
     },
-    onBackClick(){
+    onBackClick() {
       this.$router.back();
     }
   }
@@ -200,7 +201,7 @@ export default {
 .table {
   margin-top: 28px;
 }
-.setting{
+.setting {
   margin-top: 34px;
 }
 </style>

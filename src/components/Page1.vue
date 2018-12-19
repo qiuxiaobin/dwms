@@ -4,41 +4,26 @@
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
     <div :class="$style.setting">
-      <a-select
-        v-model="type"
-        @change="getTableData"
-      >
+      <a-select v-model="type" @change="getTableData">
         <a-select-option value="company">公司</a-select-option>
         <a-select-option value="region">地域</a-select-option>
+        <a-select-option value="nature">公司性质</a-select-option>
+        <a-select-option value="member">人员数量</a-select-option>
+        <a-select-option value="registered">注册资金</a-select-option>
       </a-select>
       <a-checkbox v-model="showRank">显示排名</a-checkbox>
     </div>
     <div :class="$style.chartContainer">
-      <v-chart
-        :class="$style.chart"
-        ref="chart"
-        :options="chartOptions"
-        @click="onChartClick"
-      ></v-chart>
+      <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
     </div>
     <a-input-search
       :class="$style.tableSearch"
       :placeholder="'请输入要查找的' + typeName"
       @search="onTableSearch"
     ></a-input-search>
-    <a-table
-      :class="$style.table"
-      :columns="columns"
-      :dataSource="dataSource"
-    >
-      <template
-        slot="operation"
-        slot-scope="text, record"
-      >
-        <a-button
-          :class="$style.searchButton"
-          @click="onDetailClick(record.year, record.id)"
-        >查看详情</a-button>
+    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
+      <template slot="operation" slot-scope="text, record">
+        <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
         <a-button
           v-if="!record.isChild"
           :type="chartTarget.includes(record.id) ? 'danger' : 'primary'"
@@ -67,10 +52,14 @@ export default {
   data() {
     return {
       chartData: {},
+      unit: "",
       tableData: [],
       fields: [],
       companys: [],
       regions: [],
+      natures: [],
+      members: [],
+      registereds: [],
       type: "company",
       list: [],
       searchName: "",
@@ -81,13 +70,19 @@ export default {
     chartTarget() {
       return {
         company: this.companys,
-        region: this.regions
+        region: this.regions,
+        nature: this.natures,
+        member: this.members,
+        registered: this.registereds
       }[this.type];
     },
     typeName() {
       return {
         company: "公司",
-        region: "地域"
+        region: "地域",
+        nature: "公司性质",
+        member: "人员数量",
+        registered: "注册资金"
       }[this.type];
     },
     columns() {
@@ -127,7 +122,7 @@ export default {
           key: id + "|" + data[data.length - 1].year,
           company: name,
           year: data[data.length - 1].year,
-          value: data[data.length - 1].value,
+          value: formatterNumber(data[data.length - 1].value),
           children: data.reduce(
             (prev, { year, value }, index) =>
               index == data.length - 1
@@ -138,7 +133,7 @@ export default {
                       key: id + "|" + year,
                       company: name,
                       year,
-                      value,
+                      value: formatterNumber(value),
                       isChild: true
                     },
                     ...prev
@@ -183,7 +178,7 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最低值：" +
-                params.value +
+                formatterNumber(params.value) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
@@ -192,12 +187,17 @@ export default {
                 "年份：" +
                 params.name +
                 "<br>最高值：" +
-                params.value +
+                formatterNumber(params.value) +
                 "<br>公司：" +
                 series[params.seriesIndex].data[params.dataIndex].company
               );
             } else if (params.seriesName == "平均值") {
-              return "年份：" + params.name + "<br>平均值：" + params.value;
+              return (
+                "年份：" +
+                params.name +
+                "<br>平均值：" +
+                formatterNumber(params.value)
+              );
             } else {
               if (params.seriesType == "bar") {
                 return (
@@ -213,7 +213,7 @@ export default {
                   "年份：" +
                   params.name +
                   "<br>金额：" +
-                  params.value +
+                  formatterNumber(params.value) +
                   "<br>公司：" +
                   params.seriesName
                 );
@@ -248,7 +248,7 @@ export default {
         yAxis: [
           {
             type: "value",
-            name: "金额(万元)"
+            name: "单位:" + this.unit
           },
           this.showRank
             ? {
@@ -271,6 +271,9 @@ export default {
         this.chartData = {};
         this.companys = [];
         this.regions = [];
+        this.natures = [];
+        this.members = [];
+        this.registereds = [];
         this.getFields();
         this.getTableData();
       }
@@ -322,6 +325,8 @@ export default {
         })
         .then(({ data }) => {
           if (data.flag > -1) {
+            unit = data.unit;
+            this.unit = data.unit;
             this.chartData = data.data;
           } else {
             this.$message.error(data.msg);
@@ -357,6 +362,18 @@ export default {
     }
   }
 };
+var unit = "";
+function formatterNumber(val) {
+  if (unit != "%") {
+    var nums = String(val).split(".");
+    var num = nums[0];
+    var float = nums[1] ? nums[1] : "";
+    num = parseInt(num).toLocaleString();
+    return num + "." + float;
+  } else {
+    return val;
+  }
+}
 </script>
 
 <style module>
