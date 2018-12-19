@@ -225,25 +225,23 @@ export default {
             } else {
               if (params.seriesType == "bar") {
                 return (
-                  "年份：" +
+                  "公司：" +
+                  params.seriesName +
+                  "<br>年份：" +
                   params.name +
                   "<br>排名：" +
-                  -params.value +
-                  "<br>公司：" +
-                  params.seriesName
+                  -params.value
                 );
               } else {
                 return (
-                  "年份：" +
-                  params.name +
-                  "<br>" +
-                  (this.type != "company" ? "平均值" : "金额") +
-                  "：" +
-                  formatterNumber(params.value, this.unit) +
-                  "<br>" +
                   this.typeName +
                   "：" +
-                  params.seriesName
+                  params.seriesName +
+                  "<br>年份：" +
+                  params.name +
+                  (this.type != "company" ? "<br>平均值" : "<br>金额") +
+                  "：" +
+                  formatterNumber(params.value, this.unit)
                 );
               }
             }
@@ -256,9 +254,10 @@ export default {
         xAxis: [
           {
             type: "category",
-            data: this.chartData.bar
-              ? this.chartData.bar[0].data.map(({ year }) => year)
-              : []
+            data:
+              this.chartData.bar && this.chartData.bar.length
+                ? this.chartData.bar[0].data.map(({ year }) => year)
+                : []
           }
         ],
         yAxis: [
@@ -297,9 +296,7 @@ export default {
     chartTarget: {
       immediate: true,
       handler() {
-        if (this.chartTarget.length > 0) {
-          this.getLineBarChartData();
-        }
+        this.getLineBarChartData();
       }
     }
   },
