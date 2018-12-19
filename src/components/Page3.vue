@@ -1,16 +1,22 @@
 <template>
   <div>
-    <div>
+    <div :class="$style.head">
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
 
     <div :class="$style.chartContainer">
       <div>
         <div :class="$style.box">
-          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.dupont"></boxContent>
+          <boxContent
+            @click="onBoxContentClick"
+            :data="boxContentDataMap.dupont"
+          ></boxContent>
           <div :class="$style.yLineCenter">
             <div :class="$style.xLine">
-              <img :class="$style.methodIcon" src="@assets/ride.png">
+              <img
+                :class="$style.methodIcon"
+                src="@assets/ride.png"
+              >
               <div :class="$style.yLineLeft">
                 <div :class="$style.childBox">
                   <boxContent
@@ -19,7 +25,10 @@
                   >总资产收益率</boxContent>
                   <div :class="$style.yLineCenter">
                     <div :class="$style.xLine2">
-                      <img :class="$style.methodIcon" src="@assets/ride.png">
+                      <img
+                        :class="$style.methodIcon"
+                        src="@assets/ride.png"
+                      >
                       <div :class="$style.yLineLeft">
                         <div :class="$style.childBox">
                           <boxContent
@@ -28,7 +37,10 @@
                           >销售净利率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine3">
-                              <img :class="$style.methodIcon" src="@assets/except.png">
+                              <img
+                                :class="$style.methodIcon"
+                                src="@assets/except.png"
+                              >
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -57,7 +69,10 @@
                           >总资产周转率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine4">
-                              <img :class="$style.methodIcon" src="@assets/except.png">
+                              <img
+                                :class="$style.methodIcon"
+                                src="@assets/except.png"
+                              >
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -108,9 +123,19 @@
       </div>
     </div>
 
-    <a-table :columns="columns" :dataSource="dataSource" :class="$style.table">
-      <template slot="operation" slot-scope="text, record">
-        <a-button success @click="onClick(record.code)">查看详情</a-button>
+    <a-table
+      :columns="columns"
+      :dataSource="dataSource"
+      :class="$style.table"
+    >
+      <template
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          success
+          @click="onClick(record.code)"
+        >查看详情</a-button>
       </template>
     </a-table>
   </div>
@@ -250,25 +275,20 @@ export default {
         .then(({ data }) => {
           if (data.flag > -1) {
             this.duPointFormulaData = data.data;
-            this.$message.success(data.msg);
           } else {
             this.$message.error(data.msg);
           }
         });
     },
     onClick(code) {
-      // this.$message.error(`暂未支持(code:${code})`);
       this.$router.push({
         path: `/analysis/${code}/company/${this.year}/${this.companyId}`
       });
-      // this.$router.push({path: `${this.$route.path}/${code}`})
     },
     onBoxContentClick(code) {
-      // this.$message.error(`暂未支持(code:${code})`);
       this.$router.push({
         path: `/analysis/${code}/company/${this.year}/${this.companyId}`
       });
-      // this.$router.push({path: `${this.$route.path}/${code}`})
     }
   }
 };
@@ -364,5 +384,8 @@ export default {
 }
 .table td {
   padding: 10px 16px !important;
+}
+.head {
+  height: 20px;
 }
 </style>

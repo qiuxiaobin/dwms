@@ -2,9 +2,17 @@
   <a-layout :class="$style.container">
     <a-layout-sider>
       <div :class="$style.title">
-        <img :class="$style.logo" src="@assets/menuLogo.png">
+        <img
+          :class="$style.logo"
+          src="@assets/menuLogo.png"
+        >
       </div>
-      <a-menu theme="dark" mode="inline" :selected-keys="[field]" :open-keys="openKeys">
+      <a-menu
+        theme="dark"
+        mode="inline"
+        :selected-keys="[field]"
+        :open-keys="openKeys"
+      >
         <template v-for="menuItem in menuList">
           <a-sub-menu
             :key="menuItem.field"
@@ -20,7 +28,11 @@
               <span>{{subMenuItem.title}}</span>
             </a-menu-item>
           </a-sub-menu>
-          <a-menu-item :key="menuItem.field" v-else @click="onMenuItemClick(menuItem.field)">
+          <a-menu-item
+            :key="menuItem.field"
+            v-else
+            @click="onMenuItemClick(menuItem.field)"
+          >
             <span>{{menuItem.title}}</span>
           </a-menu-item>
         </template>
@@ -29,7 +41,11 @@
     <a-layout>
       <a-layout-header :class="$style.header">
         <span :class="$style.user">{{userName}}</span>
-        <a-icon :class="$style.logout" type="logout" @click="onLogoutClick"></a-icon>
+        <a-icon
+          :class="$style.logout"
+          type="logout"
+          @click="onLogoutClick"
+        ></a-icon>
       </a-layout-header>
       <a-layout-content :class="$style.content">
         <router-view></router-view>
@@ -110,11 +126,12 @@ export default {
     },
     onLogoutClick() {
       this.$axios.get("/DW/loginOrExit/checklogout").then(({ data }) => {
-        if (data.flag > 0) {
-          this.$router.push({ path: "/login" });
-        } else {
-          this.$message.error(data.msg);
-        }
+        // if (data.flag > 0) {
+        //   this.$router.push({ path: "/login" });
+        // } else {
+        //   this.$message.error(data.msg);
+        // }
+        this.$router.push({ path: "/login" });
       });
     }
   }

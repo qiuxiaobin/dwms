@@ -34,8 +34,10 @@ export default {
 
 <style module>
 .boxContent {
-  padding: 0 16px;
+  min-width: 40px;
+  height: 28px;
   line-height: 28px;
+  padding: 0 16px;
 }
 .boxContentWarning {
   composes: boxContent;

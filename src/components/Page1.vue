@@ -4,7 +4,9 @@
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
     <div :class="$style.setting">
+      业务类型：
       <a-select
+        :class="$style.type"
         v-model="type"
         @change="getTableData"
       >
@@ -14,7 +16,10 @@
         <a-select-option value="member">人员数量</a-select-option>
         <a-select-option value="registered">注册资金</a-select-option>
       </a-select>
-      <a-checkbox v-model="showRank">显示排名</a-checkbox>
+      <a-checkbox
+        :class="$style.showRank"
+        v-model="showRank"
+      >显示排名</a-checkbox>
     </div>
     <div :class="$style.chartContainer">
       <v-chart
@@ -81,7 +86,7 @@ export default {
       type: "company",
       list: [],
       searchName: "",
-      showRank: false
+      showRank: true
     };
   },
   computed: {
@@ -252,21 +257,6 @@ export default {
             data: this.chartData.bar
               ? this.chartData.bar[0].data.map(({ year }) => year)
               : []
-            // data: [
-            //   2005,
-            //   2006,
-            //   2007,
-            //   2008,
-            //   2009,
-            //   2010,
-            //   2011,
-            //   2012,
-            //   2013,
-            //   2014,
-            //   2015,
-            //   2016,
-            //   2017
-            // ]
           }
         ],
         yAxis: [
@@ -417,5 +407,12 @@ export default {
 }
 .searchButton {
   margin-right: 10px;
+}
+.showRank {
+  margin-left: 15px;
+}
+.type {
+  width: 100px;
+  margin-left: 10px;
 }
 </style>

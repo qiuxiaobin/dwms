@@ -9,12 +9,27 @@
     </div>
 
     <div :class="$style.chartContainer">
-      <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
+      <v-chart
+        :class="$style.chart"
+        :options="chartOptions"
+        @click="onChartClick"
+      ></v-chart>
     </div>
 
-    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
-      <template v-if="field == 'dupont'" slot="operation" slot-scope="text, record">
-        <a-button success @click="onButtonClick(record.id)">查看详情</a-button>
+    <a-table
+      :class="$style.table"
+      :columns="columns"
+      :dataSource="dataSource"
+    >
+      <template
+        v-if="field == 'dupont'"
+        slot="operation"
+        slot-scope="text, record"
+      >
+        <a-button
+          success
+          @click="onButtonClick(record.id)"
+        >查看详情</a-button>
       </template>
     </a-table>
   </div>
@@ -165,7 +180,6 @@ export default {
         .then(({ data }) => {
           if (data.flag > -1) {
             this.barData = data.data;
-            this.$message.success(data.msg);
           } else {
             this.$message.error(data.msg);
           }

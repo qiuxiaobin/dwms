@@ -13,6 +13,5 @@ module.exports = {
       .set("@utils", resolve("src/utils"))
       .set("@components", resolve("src/components"))
       .set("@assets", resolve("src/assets"));
-  },
-  productionSourceMap: false
+  }
 };
