@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div :class="$style.head">
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
     <div :class="$style.setting">
@@ -240,7 +240,9 @@ export default {
                   (this.type != "company" ? "平均值" : "金额") +
                   "：" +
                   formatterNumber(params.value, this.unit) +
-                  "<br>公司：" +
+                  "<br>" +
+                  this.typeName +
+                  "：" +
                   params.seriesName
                 );
               }
@@ -414,5 +416,8 @@ export default {
 .type {
   width: 100px;
   margin-left: 10px;
+}
+.head {
+  height: 20px;
 }
 </style>

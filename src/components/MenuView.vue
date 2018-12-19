@@ -11,7 +11,7 @@
         theme="dark"
         mode="inline"
         :selected-keys="[field]"
-        :open-keys="openKeys"
+        :default-open-keys="openKeys"
       >
         <template v-for="menuItem in menuList">
           <a-sub-menu
@@ -168,11 +168,13 @@ export default {
   align-items: center;
   padding: 0;
   background-color: #fff;
+  box-shadow: 0px 0px 9px 1px rgba(0, 0, 0, 0.1);
 }
 .content {
   margin: 28px 23px 28px 25px;
   padding: 23px 24px 27px 24px;
   background-color: #fff;
+  border-radius: 4px;
 }
 .user {
   font-size: 16px;

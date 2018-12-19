@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div :class="$style.head">
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
 
@@ -86,7 +86,10 @@ export default {
         xAxis: {
           boundaryGap: true,
           axisLabel: {
-            formatter: value => (value || "").split("").join("\n"),
+            formatter: value =>
+              this.type == "company"
+                ? (value || "").split("").join("\n")
+                : value,
             interval: 0
           },
           axisTick: {
@@ -124,7 +127,7 @@ export default {
             },
             barMaxWidth: "35",
             data: this.dataSource.map(({ data, id }) =>
-              id == this.id
+              this.id == id
                 ? { value: data, itemStyle: { color: "#FFE383" } }
                 : data
             )
@@ -135,7 +138,7 @@ export default {
     columns() {
       return [
         {
-          title: "公司",
+          title: this.typeName,
           dataIndex: "name",
           key: "name"
         },
@@ -157,6 +160,15 @@ export default {
             }
           : {}
       ];
+    },
+    typeName() {
+      return {
+        company: "公司",
+        region: "地域",
+        nature: "公司性质",
+        member: "人员数量",
+        registered: "注册资金"
+      }[this.type];
     },
     fieldName() {
       return (
@@ -239,5 +251,8 @@ export default {
 }
 .setting {
   margin-top: 34px;
+}
+.head {
+  height: 20px;
 }
 </style>
