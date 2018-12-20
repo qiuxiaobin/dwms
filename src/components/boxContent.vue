@@ -4,9 +4,7 @@
       <div
         @click="onClick"
         :class="data.isWarning ? $style.boxContentWarning : $style.boxContent"
-      >
-        {{data.name}}
-      </div>
+      >{{data.name=='资产负债率'?'1÷(1-资产负债率)':data.name}}</div>
       <div slot="title">
         <div>{{data.name}}</div>
         <div>您的{{data.name}}为{{data.your}}，平</div>

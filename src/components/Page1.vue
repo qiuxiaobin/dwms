@@ -1,52 +1,30 @@
 <template>
   <div>
+    <a-button :class="$style.reportBtn" v-show="this.field=='dupont'">生成分析报告</a-button>
     <div :class="$style.head">
       <span :class="$style.fieldName">{{fieldName}}</span>
     </div>
-    <div :class="$style.setting">
-      业务类型：
-      <a-select
-        :class="$style.type"
-        v-model="type"
-        @change="getTableData"
-      >
+    <div :class="$style.setting">业务类型：
+      <a-select :class="$style.type" v-model="type" @change="getTableData">
         <a-select-option value="company">公司</a-select-option>
         <a-select-option value="region">地域</a-select-option>
         <a-select-option value="nature">公司性质</a-select-option>
         <a-select-option value="member">人员数量</a-select-option>
         <a-select-option value="registered">注册资金</a-select-option>
       </a-select>
-      <a-checkbox
-        :class="$style.showRank"
-        v-model="showRank"
-      >显示排名</a-checkbox>
+      <a-checkbox :class="$style.showRank" v-model="showRank">显示排名</a-checkbox>
     </div>
     <div :class="$style.chartContainer">
-      <v-chart
-        :class="$style.chart"
-        ref="chart"
-        :options="chartOptions"
-        @click="onChartClick"
-      ></v-chart>
+      <v-chart :class="$style.chart" ref="chart" :options="chartOptions" @click="onChartClick"></v-chart>
     </div>
     <a-input-search
       :class="$style.tableSearch"
       :placeholder="'请输入要查找的' + typeName"
       @search="onTableSearch"
     ></a-input-search>
-    <a-table
-      :class="$style.table"
-      :columns="columns"
-      :dataSource="dataSource"
-    >
-      <template
-        slot="operation"
-        slot-scope="text, record"
-      >
-        <a-button
-          :class="$style.searchButton"
-          @click="onDetailClick(record.year, record.id)"
-        >查看详情</a-button>
+    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
+      <template slot="operation" slot-scope="text, record">
+        <a-button :class="$style.searchButton" @click="onDetailClick(record.year, record.id)">查看详情</a-button>
         <a-button
           v-if="!record.isChild"
           :type="chartTarget.includes(record.id) ? 'danger' : 'primary'"
@@ -255,8 +233,8 @@ export default {
           {
             type: "category",
             data:
-              this.chartData.bar && this.chartData.bar.length
-                ? this.chartData.bar[0].data.map(({ year }) => year)
+              this.chartData.line && this.chartData.line.length
+                ? this.chartData.line[0].data.map(({ year }) => year)
                 : []
           }
         ],
@@ -340,6 +318,7 @@ export default {
           if (data.flag > -1) {
             this.unit = data.unit;
             this.chartData = data.data;
+            console.log(this.chartData);
           } else {
             this.$message.error(data.msg);
           }
@@ -377,6 +356,11 @@ export default {
 </script>
 
 <style module>
+.reportBtn {
+  position: absolute;
+  top: 23px;
+  right: 24px;
+}
 .chartContainer {
   display: flex;
   flex-direction: column;

@@ -2,17 +2,9 @@
   <a-layout :class="$style.container">
     <a-layout-sider>
       <div :class="$style.title">
-        <img
-          :class="$style.logo"
-          src="@assets/menuLogo.png"
-        >
+        <img :class="$style.logo" src="@assets/menuLogo.png">
       </div>
-      <a-menu
-        theme="dark"
-        mode="inline"
-        :selected-keys="[field]"
-        :default-open-keys="openKeys"
-      >
+      <a-menu theme="dark" mode="inline" :selected-keys="[field]" :default-open-keys="openKeys">
         <template v-for="menuItem in menuList">
           <a-sub-menu
             :key="menuItem.field"
@@ -28,11 +20,7 @@
               <span>{{subMenuItem.title}}</span>
             </a-menu-item>
           </a-sub-menu>
-          <a-menu-item
-            :key="menuItem.field"
-            v-else
-            @click="onMenuItemClick(menuItem.field)"
-          >
+          <a-menu-item :key="menuItem.field" v-else @click="onMenuItemClick(menuItem.field)">
             <span>{{menuItem.title}}</span>
           </a-menu-item>
         </template>
@@ -41,11 +29,7 @@
     <a-layout>
       <a-layout-header :class="$style.header">
         <span :class="$style.user">{{userName}}</span>
-        <a-icon
-          :class="$style.logout"
-          type="logout"
-          @click="onLogoutClick"
-        ></a-icon>
+        <a-icon :class="$style.logout" type="logout" @click="onLogoutClick"></a-icon>
       </a-layout-header>
       <a-layout-content :class="$style.content">
         <router-view></router-view>
@@ -107,6 +91,18 @@ export default {
             {
               field: "dupont",
               title: "杜邦分析"
+            },
+            {
+              field: "trend",
+              title: "公司走势分析"
+            },
+            {
+              field: "asset",
+              title: "资产结构分析"
+            },
+            {
+              field: "income",
+              title: "收入分析"
             }
           ]
         }

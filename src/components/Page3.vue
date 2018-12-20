@@ -7,16 +7,10 @@
     <div :class="$style.chartContainer">
       <div>
         <div :class="$style.box">
-          <boxContent
-            @click="onBoxContentClick"
-            :data="boxContentDataMap.dupont"
-          ></boxContent>
+          <boxContent @click="onBoxContentClick" :data="boxContentDataMap.dupont"></boxContent>
           <div :class="$style.yLineCenter">
             <div :class="$style.xLine">
-              <img
-                :class="$style.methodIcon"
-                src="@assets/ride.png"
-              >
+              <img :class="$style.methodIcon" src="@assets/ride.png">
               <div :class="$style.yLineLeft">
                 <div :class="$style.childBox">
                   <boxContent
@@ -25,10 +19,7 @@
                   >总资产收益率</boxContent>
                   <div :class="$style.yLineCenter">
                     <div :class="$style.xLine2">
-                      <img
-                        :class="$style.methodIcon"
-                        src="@assets/ride.png"
-                      >
+                      <img :class="$style.methodIcon" src="@assets/ride.png">
                       <div :class="$style.yLineLeft">
                         <div :class="$style.childBox">
                           <boxContent
@@ -37,10 +28,7 @@
                           >销售净利率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine3">
-                              <img
-                                :class="$style.methodIcon"
-                                src="@assets/except.png"
-                              >
+                              <img :class="$style.methodIcon" src="@assets/except.png">
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -69,10 +57,7 @@
                           >总资产周转率</boxContent>
                           <div :class="$style.yLineCenter">
                             <div :class="$style.xLine4">
-                              <img
-                                :class="$style.methodIcon"
-                                src="@assets/except.png"
-                              >
+                              <img :class="$style.methodIcon" src="@assets/except.png">
                               <div :class="$style.yLineLeft">
                                 <div :class="$style.childBox">
                                   <boxContent
@@ -110,7 +95,7 @@
                           <boxContent
                             @click="onBoxContentClick"
                             :data="boxContentDataMap.assetLiabilityRatio"
-                          >=1/(1-资产负债率)</boxContent>
+                          >=1÷(1-资产负债率)</boxContent>
                         </div>
                       </div>
                     </div>
@@ -123,19 +108,9 @@
       </div>
     </div>
 
-    <a-table
-      :columns="columns"
-      :dataSource="dataSource"
-      :class="$style.table"
-    >
-      <template
-        slot="operation"
-        slot-scope="text, record"
-      >
-        <a-button
-          success
-          @click="onClick(record.code)"
-        >查看详情</a-button>
+    <a-table :columns="columns" :dataSource="dataSource" :class="$style.table">
+      <template slot="operation" slot-scope="text, record">
+        <a-button success @click="onClick(record.code)">查看详情</a-button>
       </template>
     </a-table>
   </div>

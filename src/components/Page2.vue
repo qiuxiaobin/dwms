@@ -9,27 +9,12 @@
     </div>
 
     <div :class="$style.chartContainer">
-      <v-chart
-        :class="$style.chart"
-        :options="chartOptions"
-        @click="onChartClick"
-      ></v-chart>
+      <v-chart :class="$style.chart" :options="chartOptions" @click="onChartClick"></v-chart>
     </div>
 
-    <a-table
-      :class="$style.table"
-      :columns="columns"
-      :dataSource="dataSource"
-    >
-      <template
-        v-if="field == 'dupont'"
-        slot="operation"
-        slot-scope="text, record"
-      >
-        <a-button
-          success
-          @click="onButtonClick(record.id)"
-        >查看详情</a-button>
+    <a-table :class="$style.table" :columns="columns" :dataSource="dataSource">
+      <template v-if="field == 'dupont'" slot="operation" slot-scope="text, record">
+        <a-button success @click="onButtonClick(record.id)">查看详情</a-button>
       </template>
     </a-table>
   </div>
@@ -37,7 +22,7 @@
 
 <script>
 import ECharts from "vue-echarts";
-
+import { formatterNumber, resetNumber } from "@utils";
 export default {
   components: {
     "v-chart": ECharts
@@ -59,7 +44,8 @@ export default {
   data() {
     return {
       barData: [],
-      fields: []
+      fields: [],
+      unit: ""
     };
   },
   watch: {
@@ -72,7 +58,11 @@ export default {
   },
   computed: {
     dataSource() {
-      return this.barData.map(item => ({ ...item, year: this.year }));
+      var that = this;
+      return this.barData.map(function(item) {
+        item.data = formatterNumber(item.data, that.unit);
+        return { ...item, year: that.year };
+      }); //item => ({ ...item, year: this.year })
     },
     chartOptions() {
       return {
@@ -105,7 +95,8 @@ export default {
           data: this.dataSource.map(({ name }) => name)
         },
         yAxis: {
-          type: "value"
+          type: "value",
+          name: "单位:" + this.unit
         },
         series: [
           {
@@ -128,8 +119,11 @@ export default {
             barMaxWidth: "35",
             data: this.dataSource.map(({ data, id }) =>
               this.id == id
-                ? { value: data, itemStyle: { color: "#FFE383" } }
-                : data
+                ? {
+                    value: resetNumber(data, this.unit),
+                    itemStyle: { color: "#FFE383" }
+                  }
+                : resetNumber(data, this.unit)
             )
           }
         ]
@@ -192,6 +186,7 @@ export default {
         .then(({ data }) => {
           if (data.flag > -1) {
             this.barData = data.data;
+            this.unit = data.unit;
           } else {
             this.$message.error(data.msg);
           }
